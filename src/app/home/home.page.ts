@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { AnimationController, InfiniteScrollCustomEvent } from '@ionic/angular';
 import { Paginated } from '../core/models/paginated.model';
 import { Person } from '../core/models/person.model';
+import { MyPeopleService } from '../core/services/my-people.service';
 
 @Component({
   selector: 'app-home',
@@ -31,7 +32,7 @@ export class HomePage implements OnInit{
 
   selectedPerson: any = null;
   isAnimating = false;
-  page:number = 0;
+  page:number = 1;
   pageSize:number = 25;
 
 
