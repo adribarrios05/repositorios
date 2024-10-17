@@ -18,7 +18,7 @@ export class HomePage implements OnInit{
 
   constructor(
     private animationCtrl: AnimationController,
-    private peopleSv:MyPeopleService
+    private peopleSv: PeopleService
   ) {}
 
   ngOnInit(): void {
