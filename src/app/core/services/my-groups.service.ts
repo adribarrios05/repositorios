@@ -22,7 +22,7 @@ export interface PaginatedRaw<T> {
 @Injectable({
     providedIn:'root'
 })
-export class MyPeopleService{
+export class MyGroupsService{
 
     private apiUrl:string = "http://localhost:3000/grupos"
     constructor(

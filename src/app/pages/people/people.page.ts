@@ -1,17 +1,16 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { PeopleService } from '../core/services/impl/people.service';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { AnimationController, InfiniteScrollCustomEvent } from '@ionic/angular';
-import { Paginated } from '../core/models/paginated.model';
-import { Person } from '../core/models/person.model';
-import { MyPeopleService } from '../core/services/my-people.service';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Paginated } from 'src/app/core/models/paginated.model';
+import { Person } from 'src/app/core/models/person.model';
+import { PeopleService } from 'src/app/core/services/impl/people.service';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+  selector: 'app-people',
+  templateUrl: './people.page.html',
+  styleUrls: ['./people.page.scss'],
 })
-export class HomePage implements OnInit{
+export class PeoplePage implements OnInit {
 
   _people:BehaviorSubject<Person[]> = new BehaviorSubject<Person[]>([]);
   people$:Observable<Person[]> = this._people.asObservable();

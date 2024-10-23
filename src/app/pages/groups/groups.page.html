@@ -1,0 +1,26 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>groups</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">groups</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-list>
+    <ion-item *ngFor="let group of groups$ | async; let i = index" (click)="openGroupDetail(group, i)">
+      <ion-label class="ion-text-nowrap">
+        {{group.name}}
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <div #animatedAvatarContainer class="animated-avatar-container" [ngStyle]="{'display':isAnimating?'block':'none'}">
+    <img #animatedAvatar [src]="selectedGroup?.picture?.large" alt="Foto de {{ selectedGroup?.name.first }}">
+  </div>
+  <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
