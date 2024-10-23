@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { AnimationController, InfiniteScrollCustomEvent } from '@ionic/angular';
+import { AnimationController, InfiniteScrollCustomEvent, ModalController } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { PersonModalComponent } from 'src/app/components/person-modal/person-modal.component';
 import { Paginated } from 'src/app/core/models/paginated.model';
 import { Person } from 'src/app/core/models/person.model';
 import { PeopleService } from 'src/app/core/services/impl/people.service';
@@ -17,7 +18,8 @@ export class PeoplePage implements OnInit {
 
   constructor(
     private animationCtrl: AnimationController,
-    private peopleSv:PeopleService
+    private peopleSv:PeopleService,
+    private modalCtrl:ModalController
   ) {}
 
   ngOnInit(): void {
@@ -85,6 +87,18 @@ export class PeoplePage implements OnInit {
   onIonInfinite(ev:InfiniteScrollCustomEvent) {
     this.getMorePeople(ev.target);
     
+  }
+
+  async onAddPerson(){
+    const modal = await this.modalCtrl.create({
+      component:PersonModalComponent,
+      componentProps:{
+      }
+    });
+    modal.onDidDismiss().then((res:any)=>{
+      console.log(res);
+    });
+    await modal.present();
   }
 
 }

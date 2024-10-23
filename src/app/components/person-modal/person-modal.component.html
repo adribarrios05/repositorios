@@ -1,0 +1,58 @@
+
+  <ion-header>
+    <ion-title>
+      @if (person) {
+        <h1>Editar persona</h1>
+      }
+      @else {
+        <h1>Nueva persona</h1>
+      }
+    </ion-title>
+  </ion-header>
+  <ion-content>
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+      <ion-item>
+        <ion-label position="floating">Nombre</ion-label>
+        <ion-input type="text" formControlName="name"></ion-input>
+      </ion-item>
+      <ion-text color="danger" *ngIf="name?.invalid && (name?.dirty || name?.touched)">
+        <p *ngIf="name?.errors?.['required']">El nombre es obligatorio.</p>
+        <p *ngIf="name?.errors?.['minlength']">El nombre debe tener al menos 2 caracteres.</p>
+      </ion-text>
+  
+      <!-- Apellidos -->
+      <ion-item>
+        <ion-label position="floating">Apellidos</ion-label>
+        <ion-input type="text" formControlName="surname"></ion-input>
+      </ion-item>
+      <ion-text color="danger" *ngIf="surname?.invalid && (surname?.dirty || surname?.touched)">
+        <p *ngIf="surname?.errors?.['required']">Los apellidos son obligatorios.</p>
+        <p *ngIf="surname?.errors?.['minlength']">Los apellidos deben tener al menos 2 caracteres.</p>
+      </ion-text>
+  
+      <!-- Email -->
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input type="email" formControlName="email"></ion-input>
+      </ion-item>
+      <ion-text color="danger" *ngIf="email?.invalid && (email?.dirty || email?.touched)">
+        <p *ngIf="email?.errors?.['required']">El email es obligatorio.</p>
+        <p *ngIf="email?.errors?.['email']">Por favor, introduce un email válido.</p>
+      </ion-text>
+  
+      <!-- Género -->
+      <ion-item>
+        <ion-label>Género</ion-label>
+        <ion-select formControlName="gender" placeholder="Selecciona un género">
+          <ion-select-option *ngFor="let gen of genders" [value]="gen">{{ gen }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-text color="danger" *ngIf="gender?.invalid && (gender?.dirty || gender?.touched)">
+        <p *ngIf="gender?.errors?.['required']">El género es obligatorio.</p>
+      </ion-text>
+  
+      <!-- Botón de Envío -->
+      <ion-button [disabled]="formGroup.invalid" expand="full" type="submit" [disabled]="formGroup.invalid">Registrar</ion-button>
+    </form>
+
+  </ion-content>

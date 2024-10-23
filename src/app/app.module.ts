@@ -15,9 +15,15 @@ import { PeopleLocalStorageMapping } from './core/repositories/impl/people-mappi
 import { PeopleMappingJsonServer } from './core/repositories/impl/people-mapping-json-server.service';
 import { GroupsMappingJsonServer } from './core/repositories/impl/groups-mapping-json-server.service';
 import { GroupsService } from './core/services/impl/groups.service';
+import { PersonModalComponent } from './components/person-modal/person-modal.component';
+import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
-  declarations: [AppComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  declarations: [AppComponent, PersonModalComponent],
+  imports: [
+    BrowserModule, 
+    IonicModule.forRoot(), 
+    AppRoutingModule,
+    ReactiveFormsModule],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideHttpClient(),
