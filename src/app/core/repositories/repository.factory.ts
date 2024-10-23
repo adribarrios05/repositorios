@@ -9,6 +9,7 @@ import { BaseRespositoryLocalStorageService } from './impl/base-repository-local
 import { Model } from '../models/base.model';
 import { IBaseMapping } from './intefaces/base-mapping.interface';
 import { JsonServerRepositoryService } from './impl/json-server-repository.service';
+import { Group } from '../models/group.model';
 // Importa otros modelos según sea necesario
 
 export function createHttpRepository<T extends Model>(http: HttpClient, apiUrl: string, resource:string, mapping:IBaseMapping<T>): IBaseRepository<T> {
@@ -40,12 +41,12 @@ export const PeopleRepositoryFactory: FactoryProvider = {
 // Ejemplo de configuración para People
 export const GroupsRepositoryFactory: FactoryProvider = {
   provide: GROUPS_REPOSITORY_TOKEN,
-  useFactory: (http: HttpClient, apiURL:string, resource:string, mapping:IBaseMapping<Person>) => {
+  useFactory: (http: HttpClient, apiURL:string, resource:string, mapping:IBaseMapping<Group>) => {
     // Aquí puedes decidir qué implementación usar
     // Por ejemplo, usar Firebase:
     //return createHttpRepository<Person>(http, apiURL);
     //return createLocalStorageRepository<Person>(resource, mapping);
-    return createJsonServerRepository<Person>(http, apiURL, resource, mapping);
+    return createJsonServerRepository<Group>(http, apiURL, resource, mapping);
   },
   deps: [HttpClient, GROUPS_API_URL_TOKEN, GROUPS_RESOURCE_NAME_TOKEN, GROUPS_REPOSITORY_MAPPING_TOKEN]
 };
