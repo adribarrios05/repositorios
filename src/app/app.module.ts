@@ -11,7 +11,6 @@ import { GroupsRepositoryFactory, PeopleRepositoryFactory } from './core/reposit
 import { PeopleService } from './core/services/impl/people.service';
 import { GROUPS_API_URL_TOKEN, GROUPS_REPOSITORY_MAPPING_TOKEN, GROUPS_RESOURCE_NAME_TOKEN, PEOPLE_API_URL_TOKEN, PEOPLE_REPOSITORY_MAPPING_TOKEN, PEOPLE_RESOURCE_NAME_TOKEN } from './core/repositories/repository.tokens';
 import { provideHttpClient } from '@angular/common/http';
-import { PeopleLocalStorageMapping } from './core/repositories/impl/people-mapping-local-storage.service';
 import { PeopleMappingJsonServer } from './core/repositories/impl/people-mapping-json-server.service';
 import { GroupsMappingJsonServer } from './core/repositories/impl/groups-mapping-json-server.service';
 import { GroupsService } from './core/services/impl/groups.service';

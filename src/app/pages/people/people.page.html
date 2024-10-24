@@ -19,6 +19,9 @@
       <ion-label class="ion-text-nowrap">
         {{person.name}} {{person.surname}} ({{person.age}} años)
       </ion-label>
+      <ion-button slot="end">
+        <ion-icon slot="icon-only" name="trash"></ion-icon>
+      </ion-button>
     </ion-item>
   </ion-list>
   <div #animatedAvatarContainer class="animated-avatar-container" [ngStyle]="{'display':isAnimating?'block':'none'}">

@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { IBaseMapping } from "../intefaces/base-mapping.interface";
 import { Paginated } from "../../models/paginated.model";
 import { Person } from "../../models/person.model";
+import { ExceptionCode } from "@capacitor/core";
 
 
 export interface PersonRaw {
@@ -60,6 +61,11 @@ export interface PersonRaw {
         });
         return toReturn;
     }
+
+    setDelete(data: Person):PersonRaw{
+        throw new DOMException("A")
+    }
+
     getPaginated(page:number, pageSize: number, pages:number, data:PersonRaw[]): Paginated<Person> {
         return {page:page, pageSize:pageSize, pages:pages, data:data.map<Person>((d:PersonRaw)=>{
             return this.getOne(d);
