@@ -18,7 +18,7 @@ export class PeoplePage implements OnInit {
 
   constructor(
     private animationCtrl: AnimationController,
-    private peopleSv:PeopleService,
+    private peopleSvc:PeopleService,
     private modalCtrl:ModalController
   ) {}
 
@@ -37,8 +37,17 @@ export class PeoplePage implements OnInit {
   pageSize:number = 25;
 
 
+  refresh(){
+    this.page=1;
+    this.peopleSvc.getAll(this.page, this.pageSize).subscribe({
+      next:(response:Paginated<Person>)=>{
+        this._people.next([...response.data]);
+        this.page++;
+      }
+    });
+  }
   getMorePeople(notify:HTMLIonInfiniteScrollElement | null = null) {
-    this.peopleSv.getAll(this.page, this.pageSize).subscribe({
+    this.peopleSvc.getAll(this.page, this.pageSize).subscribe({
       next:(response:Paginated<Person>)=>{
         this._people.next([...this._people.value, ...response.data]);
         this.page++;
@@ -48,7 +57,9 @@ export class PeoplePage implements OnInit {
   }
 
   async openPersonDetail(person: any, index: number) {
+    await this.presentModalPerson('edit', person);
     this.selectedPerson = person;
+    /*
     const avatarElements = this.avatars.toArray();
     const clickedAvatar = avatarElements[index].nativeElement;
 
@@ -82,6 +93,7 @@ export class PeoplePage implements OnInit {
 
     // Resetear la animación después de completarla
     //this.isAnimating = false;
+    */
   }
 
   onIonInfinite(ev:InfiniteScrollCustomEvent) {
@@ -89,16 +101,40 @@ export class PeoplePage implements OnInit {
     
   }
 
-  async onAddPerson(){
+  private async presentModalPerson(mode:'new'|'edit', person:Person|undefined=undefined){
     const modal = await this.modalCtrl.create({
       component:PersonModalComponent,
-      componentProps:{
+      componentProps:(mode=='edit'?{
+        person: person
+      }:{})
+    });
+    modal.onDidDismiss().then((response:any)=>{
+      switch (response.role) {
+        case 'new':
+          this.peopleSvc.add(response.data).subscribe({
+            next:res=>{
+              this.refresh();
+            },
+            error:err=>{}
+          });
+          break;
+        case 'edit':
+          this.peopleSvc.update(person!.id, response.data).subscribe({
+            next:res=>{
+              this.refresh();
+            },
+            error:err=>{}
+          });
+          break;
+        default:
+          break;
       }
     });
-    modal.onDidDismiss().then((res:any)=>{
-      console.log(res);
-    });
     await modal.present();
+  }
+
+  async onAddPerson(){
+    await this.presentModalPerson('new');
   }
 
 }

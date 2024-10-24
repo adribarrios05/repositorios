@@ -11,6 +11,7 @@ interface PersonRaw{
         last:string;
     },
     age:number,
+    genero:string,
     picture:{
         large:string
         thumbnail:string
@@ -21,6 +22,12 @@ interface PersonRaw{
     providedIn: 'root'
   })
   export class PeopleLocalStorageMapping implements IBaseMapping<Person> {
+    setAdd(data: Person) {
+        throw new Error("Method not implemented.");
+    }
+    setUpdate(data: any) {
+        throw new Error("Method not implemented.");
+    }
     getPaginated(page:number, pageSize:number, pages:number, data: PersonRaw[]): Paginated<Person> {
         return {page:page, pageSize:pageSize, pages:pages, data:data.map<Person>((d:PersonRaw)=>{
             return this.getOne(d);
@@ -32,6 +39,7 @@ interface PersonRaw{
             name:data.name.first, 
             surname:data.name.last, 
             age:data.age,
+            gender:data.genero,
             picture:{
                 large:data.picture.large, 
                 thumbnail:data.picture.thumbnail

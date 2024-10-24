@@ -11,7 +11,18 @@ import { Person } from 'src/app/core/models/person.model';
 export class PersonModalComponent  implements OnInit {
   genders:string[] = ['Masculino', 'Femenino', 'Otros'];
   formGroup:FormGroup;
-  @Input() person:Person|undefined;
+  mode:'new'|'edit' = 'new';
+
+  @Input() set person(_person:Person){
+    if(_person && _person.id)
+      this.mode = 'edit';
+    
+    this.formGroup.controls['name'].setValue(_person.name);
+    this.formGroup.controls['surname'].setValue(_person.surname);
+    this.formGroup.controls['age'].setValue(_person.age);
+    this.formGroup.controls['gender'].setValue(_person.gender);
+    this.formGroup.controls['email'].setValue(_person.email);
+  }
 
   constructor(
     private fb:FormBuilder,
@@ -22,7 +33,7 @@ export class PersonModalComponent  implements OnInit {
       surname:['', [Validators.required, Validators.minLength(2)]],
       email:['', [Validators.required, Validators.email]],
       gender:['', [Validators.required]],
-      age:['', [Validators.pattern("/\d/g")]]
+      age:['', [Validators.pattern(/^\d+$/)]]
     });
   }
 
@@ -48,11 +59,26 @@ export class PersonModalComponent  implements OnInit {
     return this.formGroup.controls['gender'];
   }
   
+  getDirtyValues(formGroup: FormGroup): any {
+    const dirtyValues: any = {};
+  
+    Object.keys(formGroup.controls).forEach(key => {
+      const control = formGroup.get(key);
+      if (control?.dirty) {
+        dirtyValues[key] = control.value;
+      }
+    });
+  
+    return dirtyValues;
+  }
+
   onSubmit(){
     if (this.formGroup.valid) {
-      console.log('Formulario enviado:', this.formGroup.value);
-      // Pasar los datos al cerrar el modal
-      this.modalCtrl.dismiss(this.formGroup.value);
+      this.modalCtrl.dismiss(
+          (this.mode=='new'?
+            this.formGroup.value:
+            this.getDirtyValues(this.formGroup)), this.mode
+      );
     } else {
       console.log('Formulario inválido');
     }
