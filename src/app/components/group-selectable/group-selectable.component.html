@@ -1,0 +1,14 @@
+<!-- group-select.component.html -->
+<ion-item>
+
+  <ion-select
+    label="Grupo" placeholder="Seleccione un grupo"
+    [value]="selectedGroupId"
+    (ionChange)="onSelectionChange($event)"
+    interface="popover"
+  >
+    <ion-select-option *ngFor="let group of groups$ | async" [value]="group.id">
+      {{ group.name }}
+    </ion-select-option>
+  </ion-select>
+</ion-item>

@@ -33,12 +33,24 @@ export class JsonServerRepositoryService<T extends Model> extends BaseRepository
     super(http, apiUrl, resource, mapping);
   }
 
-  override getAll(page:number, pageSize:number): Observable<Paginated<T>> {
-    return this.http.get<PaginatedRaw<T>>(
-      `${this.apiUrl}/${this.resource}/?_page=${page}&_per_page=${pageSize}`)
-      .pipe(map(res=>{
-        return this.mapping.getPaginated(page, pageSize, res.pages, res.data);
-      }));
+  override getAll(page:number, pageSize:number): Observable<T[] | Paginated<T>> {
+    if(page!=-1){
+      return this.http.get<PaginatedRaw<T>>(
+        `${this.apiUrl}/${this.resource}/?_page=${page}&_per_page=${pageSize}`)
+        .pipe(map(res=>{
+          return this.mapping.getPaginated(page, pageSize, res.pages, res.data);
+        }));
+    }
+    else{
+      return this.http.get<T[]>(
+        `${this.apiUrl}/${this.resource}`)
+        .pipe(map(res=>{
+          return res.map((elem:any)=>{
+            return this.mapping.getOne(elem);
+          });
+        }));
+    }
+    
   }
 
   override add(entity: T): Observable<T> {

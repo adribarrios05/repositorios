@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Group } from 'src/app/core/models/group.model';
 import { Person } from 'src/app/core/models/person.model';
 
 @Component({
@@ -13,6 +15,13 @@ export class PersonModalComponent  implements OnInit {
   formGroup:FormGroup;
   mode:'new'|'edit' = 'new';
 
+  private _groups:BehaviorSubject<Group[]> = new BehaviorSubject<Group[]>([]);
+  public groups$:Observable<Group[]> = this._groups.asObservable();
+
+  @Input() set groups(groups:Group[]){
+    this._groups.next(groups);
+  }
+  
   @Input() set person(_person:Person){
     if(_person && _person.id)
       this.mode = 'edit';
@@ -22,6 +31,7 @@ export class PersonModalComponent  implements OnInit {
     this.formGroup.controls['age'].setValue(_person.age);
     this.formGroup.controls['gender'].setValue(_person.gender);
     this.formGroup.controls['email'].setValue(_person.email);
+    this.formGroup.controls['groupID'].setValue(_person.groupID);
   }
 
   constructor(
@@ -33,9 +43,11 @@ export class PersonModalComponent  implements OnInit {
       surname:['', [Validators.required, Validators.minLength(2)]],
       email:['', [Validators.required, Validators.email]],
       gender:['', [Validators.required]],
-      age:['', [Validators.pattern(/^\d+$/)]]
+      age:['', [Validators.pattern(/^\d+$/)]],
+      groupID:[null, [Validators.required]]
     });
   }
+  
 
   ngOnInit() {}
 
