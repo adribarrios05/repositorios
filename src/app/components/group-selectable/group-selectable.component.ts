@@ -11,7 +11,7 @@ import { Group } from 'src/app/core/models/group.model';
   providers:[
     {
       provide: NG_VALUE_ACCESSOR,
-      useClass: forwardRef(()=>GroupSelectableComponent),
+      useExisting: forwardRef(()=>GroupSelectableComponent),
       multi:true
     }
   ]
@@ -26,8 +26,8 @@ export class GroupSelectableComponent  implements OnInit, ControlValueAccessor {
   }
 
   selectedGroupId:string|null = null;
-  onChanged!:((_: any) => void);
-  onTouched!:(()=>void);
+  onChanged:any;
+  onTouched:any;
   disabled:boolean = false;
 
   constructor() { }
@@ -35,7 +35,7 @@ export class GroupSelectableComponent  implements OnInit, ControlValueAccessor {
     this.selectedGroupId = obj;
   }
 
-  registerOnChange(fn: (_: any) => void): void {
+  registerOnChange(fn: any): void {
     this.onChanged = fn;
   }
   registerOnTouched(fn: any): void {

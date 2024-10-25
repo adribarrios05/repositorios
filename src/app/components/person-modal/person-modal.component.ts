@@ -21,7 +21,7 @@ export class PersonModalComponent  implements OnInit {
   @Input() set groups(groups:Group[]){
     this._groups.next(groups);
   }
-  
+
   @Input() set person(_person:Person){
     if(_person && _person.id)
       this.mode = 'edit';
@@ -31,7 +31,7 @@ export class PersonModalComponent  implements OnInit {
     this.formGroup.controls['age'].setValue(_person.age);
     this.formGroup.controls['gender'].setValue(_person.gender);
     this.formGroup.controls['email'].setValue(_person.email);
-    this.formGroup.controls['groupID'].setValue(_person.groupID);
+    this.formGroup.controls['groupId'].setValue(_person.groupId);
   }
 
   constructor(
@@ -44,7 +44,7 @@ export class PersonModalComponent  implements OnInit {
       email:['', [Validators.required, Validators.email]],
       gender:['', [Validators.required]],
       age:['', [Validators.pattern(/^\d+$/)]],
-      groupID:[null, [Validators.required]]
+      groupId:[null, [Validators.required]]
     });
   }
   
