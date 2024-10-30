@@ -17,7 +17,16 @@ export class PeoplePage implements OnInit {
 
   _people:BehaviorSubject<Person[]> = new BehaviorSubject<Person[]>([]);
   people$:Observable<Person[]> = this._people.asObservable();
-
+  public alertYesNoButtons = [
+    {
+      text: 'No',
+      role: 'no'
+    },
+    {
+      text: 'Yes',
+      role: 'yes'
+    },
+  ];
   constructor(
     private animationCtrl: AnimationController,
     private peopleSvc:PeopleService,
@@ -143,5 +152,18 @@ export class PeoplePage implements OnInit {
   async onAddPerson(){
     await this.presentModalPerson('new');
   }
+
+  onDeletePerson(evt:CustomEvent, person:Person){
+    
+    if(evt.detail.role=='yes')
+      this.peopleSvc.delete(person.id).subscribe({
+        next:response=>{
+          this.refresh();
+        },
+        error:err=>{}
+      });
+  }
+
+  
 
 }

@@ -11,7 +11,7 @@
     </ion-toolbar>
   </ion-header>
   <ion-list>
-    <ion-item *ngFor="let person of people$ | async; let i = index" (click)="openPersonDetail(person, i)">
+    <ion-item *ngFor="let person of people$ | async; let i = index" (click)="openPersonDetail(person, i)" button detail="false">
       <ion-avatar slot="start">
         <img *ngIf="person.picture?.thumbnail" #avatar alt="Silhouette of a person's head" [src]="person.picture!.thumbnail" />
         <img *ngIf="!(person.picture?.thumbnail)" #avatar alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
@@ -19,6 +19,15 @@
       <ion-label class="ion-text-nowrap">
         {{person.name}} {{person.surname}} ({{person.age}} años)
       </ion-label>
+      <ion-button class="ion-padding" (click)="$event.stopPropagation()"[id]="'button-delete-'+person.id" slot="end" color="danger" fill="clear">
+        <ion-icon style="font-size:1.5em" name="trash-outline"></ion-icon> 
+      </ion-button>
+      <ion-alert
+        [trigger]="'button-delete-'+person.id"
+        header="Alert!"
+        [buttons]="alertYesNoButtons"
+        (didDismiss)="onDeletePerson($event, person)"
+      ></ion-alert>
     </ion-item>
   </ion-list>
   <div #animatedAvatarContainer class="animated-avatar-container" [ngStyle]="{'display':isAnimating?'block':'none'}">

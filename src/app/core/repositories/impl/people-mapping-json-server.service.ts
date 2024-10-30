@@ -40,7 +40,7 @@ export interface PersonRaw {
         };
     }
     setUpdate(data: Person):PersonRaw {
-        let toReturn:any = {};
+        let toReturn:any = {};  
         Object.keys(data).forEach(key=>{
             switch(key){
                 case 'name': toReturn['nombre']=data[key];

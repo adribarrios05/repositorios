@@ -7,6 +7,9 @@
     (ionChange)="onSelectionChange($event)"
     interface="popover"
   >
+  <ion-select-option [value]="'none'">
+    Ninguno
+  </ion-select-option> 
     <ion-select-option *ngFor="let group of groups$ | async" [value]="group.id">
       {{ group.name }}
     </ion-select-option>
