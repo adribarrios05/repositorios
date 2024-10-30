@@ -29,13 +29,13 @@ export interface GroupRaw {
             name:data.nombre, 
         };
     }
-    getAdded(data: any):Person {
+    getAdded(data: any):Group {
         throw new Error("Method not implemented.");
     }
-    getUpdated(data: any):Person {
+    getUpdated(data: any):Group {
         throw new Error("Method not implemented.");
     }
-    getDeleted(data: any):Person {
+    getDeleted(data: any):Group {
         throw new Error("Method not implemented.");
     }
   }

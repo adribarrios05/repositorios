@@ -61,7 +61,7 @@
       <ion-text color="danger" *ngIf="gender?.invalid && (gender?.dirty || gender?.touched)">
         <p *ngIf="gender?.errors?.['required']">El género es obligatorio.</p>
       </ion-text>
-      <app-group-selectable [groups]="(groups$ | async)!" formControlName="groupId"></app-group-selectable>
+      <app-group-selectable formControlName="groupId"></app-group-selectable>
   
       <!-- Botón de Envío -->
       <ion-button [disabled]="!formGroup.valid || !formGroup.dirty" expand="full" type="submit" >Registrar</ion-button>

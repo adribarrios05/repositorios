@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { AnimationController, InfiniteScrollCustomEvent, ModalController } from '@ionic/angular';
-import { BehaviorSubject, lastValueFrom, Observable } from 'rxjs';
+import { BehaviorSubject, lastValueFrom, Observable, Subscription } from 'rxjs';
 import { PersonModalComponent } from 'src/app/components/person-modal/person-modal.component';
 import { Group } from 'src/app/core/models/group.model';
 import { Paginated } from 'src/app/core/models/paginated.model';
@@ -8,13 +8,26 @@ import { Person } from 'src/app/core/models/person.model';
 import { GroupsService } from 'src/app/core/services/impl/groups.service';
 import { PeopleService } from 'src/app/core/services/impl/people.service';
 
+export class Country {
+  public id?: number;
+  public name?: string;
+  public ports?: Port[];
+}
+export class Port {
+  public id?: number;
+  public name?: string;
+  public country?: Country;
+}
 @Component({
   selector: 'app-people',
   templateUrl: './people.page.html',
   styleUrls: ['./people.page.scss'],
 })
 export class PeoplePage implements OnInit {
-
+  ports: Port[] = [];
+  port!: Port;
+  page_ = 2;
+  portsSubscription!: Subscription;
   _people:BehaviorSubject<Person[]> = new BehaviorSubject<Person[]>([]);
   people$:Observable<Person[]> = this._people.asObservable();
   public alertYesNoButtons = [
@@ -158,7 +171,7 @@ export class PeoplePage implements OnInit {
     if(evt.detail.role=='yes')
       this.peopleSvc.delete(person.id).subscribe({
         next:response=>{
-          this.refresh();
+          this.getMorePeople();
         },
         error:err=>{}
       });

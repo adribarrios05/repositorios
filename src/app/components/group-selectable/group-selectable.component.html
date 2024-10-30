@@ -1,17 +1,41 @@
-<!-- group-select.component.html -->
-<ion-item>
+<div id="popover-button" #popoverButton>
+  <ion-item [button]="!disabled" [detail]="!disabled" >
+    <ion-text slot="start" position="fixed">Grupo:</ion-text>
+    <ion-text *ngIf="!groupSelected && !disabled">Seleccione un grupo</ion-text>
+    <ion-text *ngIf="!groupSelected && disabled">Ninguno</ion-text>
+    <ion-avatar slot="start" *ngIf="groupSelected" >
+      <ion-img *ngIf="groupSelected.picture" [src]="groupSelected.picture"></ion-img>
+      <img *ngIf="!groupSelected?.picture" alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+    </ion-avatar> 
+    <ion-text *ngIf="groupSelected">{{groupSelected.name}}</ion-text>
+  </ion-item>
+  <ion-popover style="width:100%" *ngIf="!disabled" trigger="popover-button" #popover (willPresent)="onLoadGroups()">
+    <ng-template>
+      <ion-content >
+        
+        <ion-list>
+          
+          <ion-item>
+            <ion-input #search placeholder="Buscar" type="text" (ionInput)="onFilter($event)" debounce="200"></ion-input>
+            <ion-button color="medium" slot="end" fill="clear" (click)="clearSearch(search)"><ion-icon slot="icon-only" name="close-outline"></ion-icon></ion-button>
+          </ion-item>
+          <ion-item button (click)="deselect(popover)">
+            <ion-avatar slot="start">
+              <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+            </ion-avatar> 
+            <ion-text >Ninguno</ion-text>
+          </ion-item>
+          <ion-item *ngFor="let group of groups$ | async" button (click)="onGroupClicked(popover, group)">
+            <ion-avatar slot="start">
+              <ion-img *ngIf="group.picture" [src]="group.picture"></ion-img>
+              <img *ngIf="!group.picture" alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+            </ion-avatar> 
+            <ion-text >{{group.name}} </ion-text>
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ng-template>
+  </ion-popover>
+</div>
 
-  <ion-select
-    label="Grupo" placeholder="Seleccione un grupo"
-    [value]="selectedGroupId"
-    (ionChange)="onSelectionChange($event)"
-    interface="popover"
-  >
-  <ion-select-option [value]="'none'">
-    Ninguno
-  </ion-select-option> 
-    <ion-select-option *ngFor="let group of groups$ | async" [value]="group.id">
-      {{ group.name }}
-    </ion-select-option>
-  </ion-select>
-</ion-item>
+

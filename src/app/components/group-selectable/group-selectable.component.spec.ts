@@ -3,7 +3,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { GroupSelectableComponent } from './group-selectable.component';
 
-describe('GroupSelectableComponent', () => {
+describe('UserSelectableComponent', () => {
   let component: GroupSelectableComponent;
   let fixture: ComponentFixture<GroupSelectableComponent>;
 
