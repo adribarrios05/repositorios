@@ -14,6 +14,7 @@ import { PeoplePage } from './people.page';
     FormsModule,
     IonicModule,
     PeoplePageRoutingModule
+    
   ],
   declarations: [PeoplePage]
 })
