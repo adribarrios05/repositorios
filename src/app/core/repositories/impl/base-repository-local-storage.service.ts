@@ -1,7 +1,7 @@
 // src/app/repositories/impl/base-repository-http.service.ts
 import { Inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { IBaseRepository } from '../intefaces/base-repository.interface';
+import { IBaseRepository, SearchParams } from '../intefaces/base-repository.interface';
 import { Model } from '../../models/base.model';
 import { REPOSITORY_MAPPING_TOKEN, RESOURCE_NAME_TOKEN } from '../repository.tokens';
 import { IBaseMapping } from '../intefaces/base-mapping.interface';
@@ -51,7 +51,7 @@ export class BaseRespositoryLocalStorageService<T extends Model> implements IBas
     localStorage.setItem(this.resource, JSON.stringify(this._items));
   }
 
-  getAll(page:number, pageSize:number): Observable<Paginated<T>> {
+  getAll(page:number, pageSize:number, filters:SearchParams = {}): Observable<Paginated<T>> {
     return of(
       this.mapping.getPaginated(page, pageSize, Math.ceil(this._items.length / pageSize),
         this._items.slice(

@@ -1,4 +1,16 @@
-ion-popover {
-  --width: 100% !important;
-  max-width:500px;
-}
+.popover-content {
+    max-height: 300px; /* Define aquí la altura máxima */
+    overflow-y: auto; /* Habilita el desplazamiento vertical */
+  }
+
+  .fixed-search {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: white; /* Fondo para que no se superponga con el contenido */
+  }
+  
+  .scrollable-content {
+    max-height: 300px; /* Define la altura máxima deseada */
+    overflow-y: auto; /* Habilita el desplazamiento vertical */
+  }

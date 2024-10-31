@@ -58,11 +58,14 @@
           <ion-select-option *ngFor="let gen of genders" [value]="gen">{{ gen }}</ion-select-option>
         </ion-select>
       </ion-item>
+      
       <ion-text color="danger" *ngIf="gender?.invalid && (gender?.dirty || gender?.touched)">
         <p *ngIf="gender?.errors?.['required']">El género es obligatorio.</p>
       </ion-text>
-      <app-group-selectable formControlName="groupId"></app-group-selectable>
-  
+      <ion-item>
+        <ion-label position="stacked">Grupo</ion-label>
+        <app-group-selectable formControlName="groupId"></app-group-selectable>
+      </ion-item>
       <!-- Botón de Envío -->
       <ion-button [disabled]="!formGroup.valid || !formGroup.dirty" expand="full" type="submit" >Registrar</ion-button>
     </form>

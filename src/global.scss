@@ -35,3 +35,9 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+
+.selectable-popover::part(content) {
+    width: 100%;  /* Cambia el ancho deseado */
+    max-width: 500px;
+  }

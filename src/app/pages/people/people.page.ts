@@ -48,7 +48,7 @@ export class PeoplePage implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getMorePeople();
+    this.loadGroups();
   }
 
 
@@ -60,25 +60,35 @@ export class PeoplePage implements OnInit {
   isAnimating = false;
   page:number = 1;
   pageSize:number = 25;
+  pages:number = 0;
 
 
-  refresh(){
+  loadGroups(){
     this.page=1;
     this.peopleSvc.getAll(this.page, this.pageSize).subscribe({
       next:(response:Paginated<Person>)=>{
         this._people.next([...response.data]);
         this.page++;
+        this.pages = response.pages;
       }
     });
   }
-  getMorePeople(notify:HTMLIonInfiniteScrollElement | null = null) {
-    this.peopleSvc.getAll(this.page, this.pageSize).subscribe({
-      next:(response:Paginated<Person>)=>{
-        this._people.next([...this._people.value, ...response.data]);
-        this.page++;
-        notify?.complete();
-      }
-    });
+
+
+  loadMorePeople(notify:HTMLIonInfiniteScrollElement | null = null) {
+    if(this.page<=this.pages){
+      this.peopleSvc.getAll(this.page, this.pageSize).subscribe({
+        next:(response:Paginated<Person>)=>{
+          this._people.next([...this._people.value, ...response.data]);
+          this.page++;
+          notify?.complete();
+        }
+      });
+    }
+    else{
+      notify?.complete();
+    }
+    
   }
 
   async openPersonDetail(person: any, index: number) {
@@ -122,7 +132,7 @@ export class PeoplePage implements OnInit {
   }
 
   onIonInfinite(ev:InfiniteScrollCustomEvent) {
-    this.getMorePeople(ev.target);
+    this.loadMorePeople(ev.target);
     
   }
 
@@ -142,7 +152,7 @@ export class PeoplePage implements OnInit {
         case 'new':
           this.peopleSvc.add(response.data).subscribe({
             next:res=>{
-              this.refresh();
+              this.loadGroups();
             },
             error:err=>{}
           });
@@ -150,7 +160,7 @@ export class PeoplePage implements OnInit {
         case 'edit':
           this.peopleSvc.update(person!.id, response.data).subscribe({
             next:res=>{
-              this.refresh();
+              this.loadGroups();
             },
             error:err=>{}
           });
@@ -171,7 +181,7 @@ export class PeoplePage implements OnInit {
     if(evt.detail.role=='yes')
       this.peopleSvc.delete(person.id).subscribe({
         next:response=>{
-          this.getMorePeople();
+          this.loadGroups();
         },
         error:err=>{}
       });
