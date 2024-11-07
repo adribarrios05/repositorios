@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Group } from 'src/app/core/models/group.model';
 import { Paginated } from 'src/app/core/models/paginated.model';
 import { GroupsService } from 'src/app/core/services/impl/groups.service';
-import { MyGroupsService } from 'src/app/core/services/my-groups.service';
+
 
 @Component({
   selector: 'app-groups',
@@ -18,7 +18,7 @@ export class GroupsPage implements OnInit {
 
   constructor(
     private animationCtrl: AnimationController,
-    private groupsSvc:MyGroupsService
+    private groupsSvc:GroupsService
   ) {}
 
   ngOnInit(): void {
