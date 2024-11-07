@@ -10,6 +10,7 @@ import { Model } from '../models/base.model';
 import { IBaseMapping } from './intefaces/base-mapping.interface';
 import { JsonServerRepositoryService } from './impl/json-server-repository.service';
 import { Group } from '../models/group.model';
+import { StrapiRepositoryService } from './impl/strapi-repository.service';
 // Importa otros modelos según sea necesario
 
 export function createHttpRepository<T extends Model>(http: HttpClient, apiUrl: string, resource:string, mapping:IBaseMapping<T>): IBaseRepository<T> {
@@ -24,6 +25,10 @@ export function createJsonServerRepository<T extends Model>(http: HttpClient, ap
   return new JsonServerRepositoryService<T>(http, apiUrl, resource, mapping);
 }
 
+export function createStrapiRepository<T extends Model>(http: HttpClient, apiUrl: string, resource:string, mapping:IBaseMapping<T>): IBaseRepository<T> {
+  return new StrapiRepositoryService<T>(http, apiUrl, resource, mapping);
+}
+
 // Ejemplo de configuración para People
 export const PeopleRepositoryFactory: FactoryProvider = {
   provide: PEOPLE_REPOSITORY_TOKEN,
@@ -32,7 +37,8 @@ export const PeopleRepositoryFactory: FactoryProvider = {
     // Por ejemplo, usar Firebase:
     //return createHttpRepository<Person>(http, apiURL);
     //return createLocalStorageRepository<Person>(resource, mapping);
-    return createJsonServerRepository<Person>(http, apiURL, resource, mapping);
+    //return createJsonServerRepository<Person>(http, apiURL, resource, mapping);
+    return createStrapiRepository<Person>(http, apiURL, resource, mapping);
   },
   deps: [HttpClient, PEOPLE_API_URL_TOKEN, PEOPLE_RESOURCE_NAME_TOKEN, PEOPLE_REPOSITORY_MAPPING_TOKEN]
 };
@@ -46,7 +52,8 @@ export const GroupsRepositoryFactory: FactoryProvider = {
     // Por ejemplo, usar Firebase:
     //return createHttpRepository<Person>(http, apiURL);
     //return createLocalStorageRepository<Person>(resource, mapping);
-    return createJsonServerRepository<Group>(http, apiURL, resource, mapping);
+    //return createJsonServerRepository<Group>(http, apiURL, resource, mapping);
+    return createStrapiRepository<Group>(http, apiURL, resource, mapping);
   },
   deps: [HttpClient, GROUPS_API_URL_TOKEN, GROUPS_RESOURCE_NAME_TOKEN, GROUPS_REPOSITORY_MAPPING_TOKEN]
 };
