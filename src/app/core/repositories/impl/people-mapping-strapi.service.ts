@@ -98,7 +98,7 @@ export interface Meta {}
             id:data.id.toString(), 
             name:data.attributes.name, 
             surname:data.attributes.surname, 
-            groupId:typeof data.attributes.group  === 'object'?data.attributes.group?.data.id.toString():undefined,
+            groupId:typeof data.attributes.group  === 'object'?data.attributes.group?.data?.id.toString():undefined,
             gender:this.fromGenderMapping[data.attributes.gender]
         };
     }

@@ -1,0 +1,64 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Crear cuenta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" scrollY="true">
+  <div class="register-container">
+    
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <ion-grid>
+        <ion-row>
+          <ion-col style="display:flex" class="ion-justify-content-center">
+            <ion-text><h1>Crear un cuenta</h1></ion-text>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-grid>
+        <ion-row>
+          <ion-col style="display:flex" class="ion-justify-content-center ion-align-items-center">
+            ¿Tienes una cuenta?<ion-button style="text-transform:none" (click)="onLogin()" fill="clear">Inicia sesión</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-item>
+        <ion-input labelPlacement="floating" label="Nombre" type="text" formControlName="name" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input labelPlacement="floating" label="Apellidos" type="text" formControlName="surname" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input labelPlacement="floating" label="Email" type="email" formControlName="email" autocomplete="off" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input labelPlacement="floating" label="Contraseña" type="password" formControlName="password" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input labelPlacement="floating" label="Repita contraseña" type="password" formControlName="confirmPassword" required></ion-input>
+      </ion-item>
+      <ion-text class="input-error" color="danger" *ngIf="name?.invalid && (name?.dirty || name?.touched)">
+        <p *ngIf="name?.errors?.['required']">*Debe introducir su nombre</p>
+        <p *ngIf="name?.errors?.['minlength']">*El nombre debe tener al menos dos caracteres</p>
+      </ion-text>
+      <ion-text class="input-error" color="danger" *ngIf="surname?.invalid && (surname?.dirty || surname?.touched)">
+        <p *ngIf="surname?.errors?.['required']">*Debe introducir su/s apellido/s</p>
+        <p *ngIf="surname?.errors?.['minlength']">*Su/s apellido/s debe/n tener al menos dos caracteres</p>
+      </ion-text>
+      <ion-text class="input-error" color="danger" *ngIf="email?.invalid && (email?.dirty || email?.touched)">
+        <p *ngIf="email?.errors?.['required']">*Debe introducir un email</p>
+        <p *ngIf="email?.errors?.['email']">*Debe introducir un email correcto</p>
+      </ion-text>
+      <ion-text class="input-error" color="danger" *ngIf="password?.invalid && (password?.dirty || password?.touched)">
+        <p *ngIf="password?.errors?.['required']">*Debe introducir una contraseña</p>
+        <p *ngIf="password?.errors?.['passwordStrength']">*Al menos 8 caracteres, una mayúscula, una minúscula, un dígito y un caracter especial (&#64;$!%*?&)</p>
+      </ion-text>
+      <ion-text class="input-error" color="danger" *ngIf="registerForm.errors?.['passwordsMismatch']">
+        <p>*Las contraseñas no coinciden</p>
+      </ion-text>
+      <ion-button style="text-transform:none" expand="block" type="submit" [disabled]="registerForm.invalid">
+        Crear cuenta
+      </ion-button>
+    </form>
+  </div>
+</ion-content>

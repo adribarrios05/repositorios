@@ -1,3 +1,33 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+   <!-- Menú lateral -->
+   <ion-menu #menu side="start" menuId="mainMenu" contentId="mainContent" [disabled]="!(authSvc.authenticated$ | async)" >
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Menú</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-item (click)="menu.close()" routerLink="/home" routerDirection="root">Inicio</ion-item>
+        <ion-item (click)="menu.close()" *ngIf="(authSvc.authenticated$ | async)" routerLink="/people" routerDirection="root">Personas</ion-item>
+        <ion-item (click)="menu.close()" *ngIf="(authSvc.authenticated$ | async)" routerLink="/groups" routerDirection="root">Grupos</ion-item>
+        <ion-item (click)="menu.close()" *ngIf="(authSvc.authenticated$ | async)" (click)="logout()">Cerrar sesión</ion-item>
+      </ion-list>
+    </ion-content>
+    <ion-footer>
+      <ion-toolbar>
+        <ion-item lines="none">
+          <ion-avatar slot="start">
+            <!-- Avatar del usuario -->
+            <img [src]="'https://ionicframework.com/docs/img/demos/avatar.svg'" alt="Avatar" />
+          </ion-avatar>
+          <ion-label>
+            <!-- Nombre del usuario -->
+            <h3>{{ (authSvc.user$ | async)?.username}}</h3>
+          </ion-label>
+        </ion-item>
+      </ion-toolbar>
+    </ion-footer>
+  </ion-menu>
+  <ion-router-outlet id="mainContent"></ion-router-outlet>
 </ion-app>

@@ -18,7 +18,12 @@ export const API_URL_TOKEN = new InjectionToken<string>('ApiUrl');
 export const PEOPLE_API_URL_TOKEN = new InjectionToken<string>('PeopleApiUrl');
 export const GROUPS_API_URL_TOKEN = new InjectionToken<string>('GroupsApiUrl');
 export const TASKS_API_URL_TOKEN = new InjectionToken<string>('TasksApiUrl');
+export const AUTH_SIGN_IN_API_URL_TOKEN = new InjectionToken<string>('AuthSignInApiUrl');
+export const AUTH_SIGN_UP_API_URL_TOKEN = new InjectionToken<string>('AuthSignUpApiUrl');
+export const AUTH_ME_API_URL_TOKEN = new InjectionToken<string>('AuthMeApiUrl');
 
 export const REPOSITORY_MAPPING_TOKEN = new InjectionToken<IBaseMapping<any>>('IBaseRepositoryMapping');
 export const PEOPLE_REPOSITORY_MAPPING_TOKEN = new InjectionToken<IBaseMapping<Person>>('IPeopleRepositoryMapping');
 export const GROUPS_REPOSITORY_MAPPING_TOKEN = new InjectionToken<IBaseMapping<Person>>('IGroupsRepositoryMapping');
+export const AUTH_MAPPING_TOKEN = new InjectionToken<IBaseMapping<Person>>('IAuthMapping');
+export const BACKEND_TOKEN = new InjectionToken<string>('Backend');

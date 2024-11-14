@@ -22,7 +22,7 @@ export class GroupsPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getMorePeople();
+    this.getMoreGroups();
   }
 
 
@@ -36,7 +36,7 @@ export class GroupsPage implements OnInit {
   pageSize:number = 25;
 
 
-  getMorePeople(notify:HTMLIonInfiniteScrollElement | null = null) {
+  getMoreGroups(notify:HTMLIonInfiniteScrollElement | null = null) {
     this.groupsSvc.getAll(this.page, this.pageSize).subscribe({
       next:(response:Paginated<Group>)=>{
         this._groups.next([...this._groups.value, ...response.data]);
@@ -48,6 +48,8 @@ export class GroupsPage implements OnInit {
 
   async openGroupDetail(Group: any, index: number) {
     this.selectedGroup = Group;
+    
+    /*
     const avatarElements = this.avatars.toArray();
     const clickedAvatar = avatarElements[index].nativeElement;
 
@@ -81,9 +83,10 @@ export class GroupsPage implements OnInit {
 
     // Resetear la animación después de completarla
     //this.isAnimating = false;
+    */
   }
 
   onIonInfinite(ev:InfiniteScrollCustomEvent) {
-    this.getMorePeople(ev.target); 
+    this.getMoreGroups(ev.target); 
   }
 }
