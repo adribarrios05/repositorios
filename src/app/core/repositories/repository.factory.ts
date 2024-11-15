@@ -42,7 +42,8 @@ export function createBaseRepositoryFactory<T extends Model>(
   };
 };
 
-export function createBaseMappingFactory<T extends Model>(token: InjectionToken<IBaseMapping<T>>): FactoryProvider {
+export function createBaseMappingFactory<T extends Model>(token: InjectionToken<IBaseMapping<T>>,
+  dependencies:any[]): FactoryProvider {
   return {
     provide: token,
     useFactory: (backend: string) => {
@@ -59,11 +60,11 @@ export function createBaseMappingFactory<T extends Model>(token: InjectionToken<
           throw new Error("BACKEND NOT IMPLEMENTED");
       }
     },
-    deps: [BACKEND_TOKEN]
+    deps: dependencies
   };
 };
 
-export function createBaseAuthMappingFactory(token: InjectionToken<IAuthMapping>): FactoryProvider {
+export function createBaseAuthMappingFactory(token: InjectionToken<IAuthMapping>, dependencies:any[]): FactoryProvider {
   return {
     provide: token,
     useFactory: (backend: string) => {
@@ -80,7 +81,7 @@ export function createBaseAuthMappingFactory(token: InjectionToken<IAuthMapping>
           throw new Error("BACKEND NOT IMPLEMENTED");
       }
     },
-    deps: [BACKEND_TOKEN]
+    deps: dependencies
   };
 };
 
@@ -91,9 +92,9 @@ export const GroupsRepositoryFactory: FactoryProvider = createBaseRepositoryFact
   [BACKEND_TOKEN, HttpClient, GROUPS_API_URL_TOKEN, GROUPS_RESOURCE_NAME_TOKEN, GROUPS_REPOSITORY_MAPPING_TOKEN]
 );
 
-export const PeopleMappingFactory: FactoryProvider = createBaseMappingFactory<Person>(PEOPLE_REPOSITORY_MAPPING_TOKEN);
-export const GroupsMappingFactory: FactoryProvider = createBaseMappingFactory<Person>(GROUPS_REPOSITORY_MAPPING_TOKEN);
-export const AuthMappingFactory: FactoryProvider = createBaseAuthMappingFactory(AUTH_MAPPING_TOKEN);
+export const PeopleMappingFactory: FactoryProvider = createBaseMappingFactory<Person>(PEOPLE_REPOSITORY_MAPPING_TOKEN, [BACKEND_TOKEN]);
+export const GroupsMappingFactory: FactoryProvider = createBaseMappingFactory<Group>(GROUPS_REPOSITORY_MAPPING_TOKEN, [BACKEND_TOKEN]);
+export const AuthMappingFactory: FactoryProvider = createBaseAuthMappingFactory(AUTH_MAPPING_TOKEN, [BACKEND_TOKEN]);
 
 export const AuthenticationServiceFactory:FactoryProvider = {
   provide: BaseAuthenticationService,

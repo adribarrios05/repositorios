@@ -51,7 +51,7 @@
       </ion-text>
       <ion-text class="input-error" color="danger" *ngIf="password?.invalid && (password?.dirty || password?.touched)">
         <p *ngIf="password?.errors?.['required']">*Debe introducir una contraseña</p>
-        <p *ngIf="password?.errors?.['passwordStrength']">*Al menos 8 caracteres, una mayúscula, una minúscula, un dígito y un caracter especial (&#64;$!%*?&)</p>
+        <p *ngIf="password?.errors?.['passwordStrength']">*Al menos 8 caracteres, una mayúscula, una minúscula, un dígito y un caracter especial (&#64;$!%*?&.)</p>
       </ion-text>
       <ion-text class="input-error" color="danger" *ngIf="registerForm.errors?.['passwordsMismatch']">
         <p>*Las contraseñas no coinciden</p>

@@ -18,7 +18,7 @@ export class AppComponent {
 
   logout(){
     this.authSvc.signOut().subscribe(_=>{
-      this.router.navigate(['/home']);
+      this.router.navigate(['/login']);
     });
   }
 }
