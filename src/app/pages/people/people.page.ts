@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { AnimationController, InfiniteScrollCustomEvent, ModalController } from '@ionic/angular';
+import { AlertController, AnimationController, InfiniteScrollCustomEvent, ModalController, Platform } from '@ionic/angular';
 import { BehaviorSubject, lastValueFrom, Observable, Subscription } from 'rxjs';
 import { PersonModalComponent } from 'src/app/components/person-modal/person-modal.component';
 import { Group } from 'src/app/core/models/group.model';
@@ -7,6 +7,7 @@ import { Paginated } from 'src/app/core/models/paginated.model';
 import { Person } from 'src/app/core/models/person.model';
 import { GroupsService } from 'src/app/core/services/impl/groups.service';
 import { PeopleService } from 'src/app/core/services/impl/people.service';
+import { TranslateService } from '@ngx-translate/core';
 
 export class Country {
   public id?: number;
@@ -40,12 +41,19 @@ export class PeoplePage implements OnInit {
       role: 'yes'
     },
   ];
+  isWeb: boolean = false;
+
   constructor(
     private animationCtrl: AnimationController,
     private peopleSvc:PeopleService,
     private groupSvc:GroupsService,
-    private modalCtrl:ModalController
-  ) {}
+    private modalCtrl:ModalController,
+    private translate: TranslateService,
+    private alertCtrl: AlertController,
+    private platform: Platform
+  ) {
+    this.isWeb = this.platform.is('desktop');
+  }
 
   ngOnInit(): void {
     this.loadGroups();
@@ -176,15 +184,30 @@ export class PeoplePage implements OnInit {
     await this.presentModalPerson('new');
   }
 
-  onDeletePerson(evt:CustomEvent, person:Person){
-    
-    if(evt.detail.role=='yes')
-      this.peopleSvc.delete(person.id).subscribe({
-        next:response=>{
-          this.loadGroups();
+  async onDeletePerson(person: Person) {
+    const alert = await this.alertCtrl.create({
+      header: await this.translate.get('PEOPLE.MESSAGES.DELETE_CONFIRM').toPromise(),
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
         },
-        error:err=>{}
-      });
+        {
+          text: 'OK',
+          role: 'yes',
+          handler: () => {
+            this.peopleSvc.delete(person.id).subscribe({
+              next: response => {
+                this.loadGroups();
+              },
+              error: err => {}
+            });
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   

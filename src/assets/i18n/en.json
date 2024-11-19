@@ -1,0 +1,65 @@
+{
+  "COMMON": {
+    "LANGUAGE": "Language",
+    "SPANISH": "Spanish",
+    "ENGLISH": "English"
+  },
+  "PEOPLE": {
+    "TITLE": "People",
+    "ADD_BUTTON": "Add",
+    "SEARCH_PLACEHOLDER": "Search people...",
+    "NO_RESULTS": "No people found",
+    "COLUMNS": {
+      "NAME": "Name",
+      "EMAIL": "Email",
+      "PHONE": "Phone",
+      "ACTIONS": "Actions"
+    },
+    "ACTIONS": {
+      "EDIT": "Edit",
+      "DELETE": "Delete",
+      "VIEW": "View details"
+    },
+    "MESSAGES": {
+      "DELETE_CONFIRM": "Are you sure you want to delete this person?",
+      "DELETE_SUCCESS": "Person successfully deleted",
+      "DELETE_ERROR": "Error deleting person",
+      "SAVE_SUCCESS": "Person successfully saved",
+      "SAVE_ERROR": "Error saving person"
+    }
+  },
+  "PERSON": {
+    "EDIT": "Edit person",
+    "NEW": "New person",
+    "NAME": "Name",
+    "SURNAME": "Surname",
+    "EMAIL": "Email",
+    "AGE": "Age",
+    "GENDER": "Gender",
+    "GROUP": "Group",
+    "SUBMIT": "Register",
+    "ERRORS": {
+      "NAME_REQUIRED": "Name is required",
+      "NAME_MIN_LENGTH": "Name must be at least 2 characters long",
+      "SURNAME_REQUIRED": "Surname is required",
+      "SURNAME_MIN_LENGTH": "Surname must be at least 2 characters long",
+      "EMAIL_REQUIRED": "Email is required",
+      "EMAIL_INVALID": "Please enter a valid email",
+      "AGE_PATTERN": "Age must be a positive number",
+      "GENDER_REQUIRED": "Gender is required"
+    },
+    "GENDER_PLACEHOLDER": "Select a gender"
+  },
+  "GROUP_SELECTABLE": {
+    "SELECT_GROUP": "Select a group",
+    "NONE": "None",
+    "SEARCH": "Search"
+  },
+  "MENU": {
+    "TITLE": "Menu",
+    "HOME": "Home",
+    "PEOPLE": "People",
+    "GROUPS": "Groups",
+    "LOGOUT": "Logout"
+  }
+} 

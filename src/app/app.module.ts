@@ -1,5 +1,5 @@
 // src/app/app.module.ts
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -25,13 +25,32 @@ import { StrapiAuthenticationService } from './core/services/impl/strapi-authent
 import { BaseAuthenticationService } from './core/services/impl/base-authentication.service';
 import { provideLottieOptions } from 'ngx-lottie';
 import player from 'lottie-web';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+// Factory function para el loader de traducción
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
+
 @NgModule({
   declarations: [AppComponent, PersonModalComponent, GroupSelectableComponent],
   imports: [
     BrowserModule, 
     IonicModule.forRoot(), 
     AppRoutingModule,
-    ReactiveFormsModule],
+    ReactiveFormsModule,
+    HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+        deps: [HttpClient]
+      }
+    })
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideLottieOptions({

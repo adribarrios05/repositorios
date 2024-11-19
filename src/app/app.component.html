@@ -3,15 +3,28 @@
    <ion-menu #menu side="start" menuId="mainMenu" contentId="mainContent" [disabled]="!(authSvc.authenticated$ | async)" >
     <ion-header>
       <ion-toolbar>
-        <ion-title>Menú</ion-title>
+        <ion-title>{{ 'MENU.TITLE' | translate }}</ion-title>
+        <ion-fab slot="end">
+          <ion-fab-button size="small">
+            <ion-icon name="language-outline"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-list side="start">
+            <ion-fab-button (click)="changeLanguage('es')" [color]="currentLang === 'es' ? 'primary' : 'medium'">
+              <ion-text>ES</ion-text>
+            </ion-fab-button>
+            <ion-fab-button (click)="changeLanguage('en')" [color]="currentLang === 'en' ? 'primary' : 'medium'">
+              <ion-text>EN</ion-text>
+            </ion-fab-button>
+          </ion-fab-list>
+        </ion-fab>
       </ion-toolbar>
     </ion-header>
     <ion-content>
       <ion-list>
-        <ion-item (click)="menu.close()" routerLink="/home" routerDirection="root">Inicio</ion-item>
-        <ion-item (click)="menu.close()" *ngIf="(authSvc.authenticated$ | async)" routerLink="/people" routerDirection="root">Personas</ion-item>
-        <ion-item (click)="menu.close()" *ngIf="(authSvc.authenticated$ | async)" routerLink="/groups" routerDirection="root">Grupos</ion-item>
-        <ion-item (click)="menu.close()" *ngIf="(authSvc.authenticated$ | async)" (click)="logout()">Cerrar sesión</ion-item>
+        <ion-item (click)="menu.close()" routerLink="/home" routerDirection="root">{{ 'MENU.HOME' | translate }}</ion-item>
+        <ion-item (click)="menu.close()" *ngIf="(authSvc.authenticated$ | async)" routerLink="/people" routerDirection="root">{{ 'MENU.PEOPLE' | translate }}</ion-item>
+        <ion-item (click)="menu.close()" *ngIf="(authSvc.authenticated$ | async)" routerLink="/groups" routerDirection="root">{{ 'MENU.GROUPS' | translate }}</ion-item>
+        <ion-item (click)="menu.close()" *ngIf="(authSvc.authenticated$ | async)" (click)="logout()">{{ 'MENU.LOGOUT' | translate }}</ion-item>
       </ion-list>
     </ion-content>
     <ion-footer>

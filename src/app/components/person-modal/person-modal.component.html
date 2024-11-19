@@ -1,37 +1,37 @@
 
   <ion-header>
     <ion-toolbar>
-      <div class="header-content">
-        <ion-icon slot="start"  name="person-outline"></ion-icon>
-        <ion-title>
-          @if (mode=='edit') {
-            Editar persona
-          }
-          @else {
-            Nueva persona
-          }
-        </ion-title>
-      </div>
-      
-      
+      <ion-icon slot="start" name="person-outline"></ion-icon>
+      <ion-title>
+        @if (mode=='edit') {
+          {{ 'PERSON.EDIT' | translate }}
+        }
+        @else {
+          {{ 'PERSON.NEW' | translate }}
+        }
+      </ion-title>
+      @if (isMobile) {
+        <ion-buttons slot="end">
+          <ion-button (click)="dismiss()">
+            <ion-icon slot="icon-only" name="close"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      }
     </ion-toolbar>
-    <ion-title>
-      
-    </ion-title>
   </ion-header>
   <ion-content class="ion-padding">
     <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
       <ion-item>
-        <ion-input label="Nombre" label-placement="stacked"  type="text" formControlName="name"></ion-input>
+        <ion-input [label]="'PERSON.NAME' | translate" label-placement="stacked"  type="text" formControlName="name"></ion-input>
       </ion-item>
       <ion-text color="danger" *ngIf="name?.invalid && (name?.dirty || name?.touched)">
-        <p *ngIf="name?.errors?.['required']">El nombre es obligatorio.</p>
-        <p *ngIf="name?.errors?.['minlength']">El nombre debe tener al menos 2 caracteres.</p>
+        <p *ngIf="name?.errors?.['required']">{{ 'PERSON.ERRORS.NAME_REQUIRED' | translate }}</p>
+        <p *ngIf="name?.errors?.['minlength']">{{ 'PERSON.ERRORS.NAME_MIN_LENGTH' | translate }}</p>
       </ion-text>
   
       <!-- Apellidos -->
       <ion-item>
-        <ion-input label="Apellidos" label-placement="stacked"  type="text" formControlName="surname"></ion-input>
+        <ion-input [label]="'PERSON.SURNAME' | translate" label-placement="stacked" type="text" formControlName="surname"></ion-input>
       </ion-item>
       <ion-text color="danger" *ngIf="surname?.invalid && (surname?.dirty || surname?.touched)">
         <p *ngIf="surname?.errors?.['required']">Los apellidos son obligatorios.</p>
@@ -40,21 +40,21 @@
   
       <!-- Email -->
       <ion-item>
-        <ion-input label="Email" label-placement="stacked"  type="email" formControlName="email"></ion-input>
+        <ion-input [label]="'PERSON.EMAIL' | translate" label-placement="stacked" type="email" formControlName="email"></ion-input>
       </ion-item>
       <ion-text color="danger" *ngIf="email?.invalid && (email?.dirty || email?.touched)">
         <p *ngIf="email?.errors?.['required']">El email es obligatorio.</p>
         <p *ngIf="email?.errors?.['email']">Por favor, introduce un email válido.</p>
       </ion-text>
       <ion-item>
-        <ion-input label="Edad" label-placement="stacked"  type="text" formControlName="age"></ion-input>
+        <ion-input [label]="'PERSON.AGE' | translate" label-placement="stacked" type="text" formControlName="age"></ion-input>
       </ion-item>
       <ion-text color="danger" *ngIf="age?.invalid">
         <p *ngIf="age?.errors?.['pattern']">La edad debe ser un número positivo</p>
       </ion-text>
       <!-- Género -->
       <ion-item>
-        <ion-select label="Género" label-placement="stacked" formControlName="gender" placeholder="Selecciona un género">
+        <ion-select [label]="'PERSON.GENDER' | translate" label-placement="stacked" formControlName="gender" [placeholder]="'PERSON.GENDER_PLACEHOLDER' | translate">
           <ion-select-option *ngFor="let gen of genders" [value]="gen">{{ gen }}</ion-select-option>
         </ion-select>
       </ion-item>
@@ -63,11 +63,11 @@
         <p *ngIf="gender?.errors?.['required']">El género es obligatorio.</p>
       </ion-text>
       <ion-item>
-        <ion-label position="stacked">Grupo</ion-label>
+        <ion-label position="stacked">{{ 'PERSON.GROUP' | translate }}</ion-label>
         <app-group-selectable formControlName="groupId"></app-group-selectable>
       </ion-item>
       <!-- Botón de Envío -->
-      <ion-button [disabled]="!formGroup.valid || !formGroup.dirty" expand="full" type="submit" >Registrar</ion-button>
+      <ion-button [disabled]="!formGroup.valid || !formGroup.dirty" expand="full" type="submit" >{{ 'PERSON.SUBMIT' | translate }}</ion-button>
     </form>
 
   </ion-content>

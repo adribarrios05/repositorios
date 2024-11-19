@@ -1,21 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-
 import { IonicModule } from '@ionic/angular';
-
-import { PeoplePageRoutingModule } from './people-routing.module';
-
 import { PeoplePage } from './people.page';
+import { PeoplePageRoutingModule } from './people-routing.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     IonicModule,
-    PeoplePageRoutingModule
-    
+    PeoplePageRoutingModule,
+    TranslateModule.forChild()
   ],
   declarations: [PeoplePage]
 })
-export class PeoplePageModule {}
+export class PeoplePageModule { }

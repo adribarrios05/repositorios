@@ -1,0 +1,65 @@
+{
+  "COMMON": {
+    "LANGUAGE": "Idioma",
+    "SPANISH": "Español",
+    "ENGLISH": "Inglés"
+  },
+  "PEOPLE": {
+    "TITLE": "Personas",
+    "ADD_BUTTON": "Añadir",
+    "SEARCH_PLACEHOLDER": "Buscar personas...",
+    "NO_RESULTS": "No se encontraron personas",
+    "COLUMNS": {
+      "NAME": "Nombre",
+      "EMAIL": "Correo electrónico",
+      "PHONE": "Teléfono",
+      "ACTIONS": "Acciones"
+    },
+    "ACTIONS": {
+      "EDIT": "Editar",
+      "DELETE": "Eliminar",
+      "VIEW": "Ver detalles"
+    },
+    "MESSAGES": {
+      "DELETE_CONFIRM": "¿Está seguro que desea eliminar esta persona?",
+      "DELETE_SUCCESS": "Persona eliminada correctamente",
+      "DELETE_ERROR": "Error al eliminar la persona",
+      "SAVE_SUCCESS": "Persona guardada correctamente",
+      "SAVE_ERROR": "Error al guardar la persona"
+    }
+  },
+  "PERSON": {
+    "EDIT": "Editar persona",
+    "NEW": "Nueva persona",
+    "NAME": "Nombre",
+    "SURNAME": "Apellidos",
+    "EMAIL": "Email",
+    "AGE": "Edad",
+    "GENDER": "Género",
+    "GROUP": "Grupo",
+    "SUBMIT": "Registrar",
+    "ERRORS": {
+      "NAME_REQUIRED": "El nombre es obligatorio",
+      "NAME_MIN_LENGTH": "El nombre debe tener al menos 2 caracteres",
+      "SURNAME_REQUIRED": "Los apellidos son obligatorios",
+      "SURNAME_MIN_LENGTH": "Los apellidos deben tener al menos 2 caracteres",
+      "EMAIL_REQUIRED": "El email es obligatorio",
+      "EMAIL_INVALID": "Por favor, introduce un email válido",
+      "AGE_PATTERN": "La edad debe ser un número positivo",
+      "GENDER_REQUIRED": "El género es obligatorio"
+    },
+    "GENDER_PLACEHOLDER": "Selecciona un género"
+  },
+  "GROUP_SELECTABLE": {
+    "SELECT_GROUP": "Seleccione un grupo",
+    "NONE": "Ninguno",
+    "SEARCH": "Buscar"
+  },
+  "MENU": {
+    "TITLE": "Menú",
+    "HOME": "Inicio",
+    "PEOPLE": "Personas",
+    "GROUPS": "Grupos",
+    "LOGOUT": "Cerrar sesión"
+  }
+} 
