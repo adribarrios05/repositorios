@@ -4,15 +4,15 @@ import { Paginated } from "../../models/paginated.model";
 import { Person } from "../../models/person.model";
 
 export interface GroupRaw{
-    data: Data<GroupAttributes>
+    data: Data
 }
 
 export interface PersonRaw {
-    data: Data<PersonAttributes>
+    data: Data
     meta: Meta
   }
   
-export interface Data<T> {
+export interface Data {
     id: number
     attributes: PersonAttributes
 }
@@ -88,18 +88,23 @@ export interface Meta {}
         });
         return toReturn;
     }
-    getPaginated(page:number, pageSize: number, pages:number, data:Data<PersonRaw>[]): Paginated<Person> {
-        return {page:page, pageSize:pageSize, pages:pages, data:data.map<Person>((d:Data<PersonRaw>)=>{
+    getPaginated(page:number, pageSize: number, pages:number, data:Data[]): Paginated<Person> {
+        return {page:page, pageSize:pageSize, pages:pages, data:data.map<Person>((d:Data|PersonRaw)=>{
             return this.getOne(d);
         })};
     }
-    getOne(data: Data<Person>):Person {
+    getOne(data: Data | PersonRaw): Person {
+        const isPersonRaw = (data: Data | PersonRaw): data is PersonRaw => 'meta' in data;
+
+        const attributes = isPersonRaw(data) ? data.data.attributes : data.attributes;
+        const id = isPersonRaw(data) ? data.data.id : data.id;
+        
         return {
-            id:data.id.toString(), 
-            name:data.attributes.name, 
-            surname:data.attributes.surname, 
-            groupId:typeof data.attributes.group  === 'object'?data.attributes.group?.data?.id.toString():undefined,
-            gender:this.fromGenderMapping[data.attributes.gender]
+            id: id.toString(),
+            name: attributes.name,
+            surname: attributes.surname,
+            groupId: typeof attributes.group === 'object' ? attributes.group?.data?.id.toString() : undefined,
+            gender: this.fromGenderMapping[attributes.gender]
         };
     }
     getAdded(data: PersonRaw):Person {

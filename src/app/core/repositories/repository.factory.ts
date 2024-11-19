@@ -18,6 +18,8 @@ import { PeopleLocalStorageMapping } from './impl/people-mapping-local-storage.s
 import { PeopleMappingJsonServer } from './impl/people-mapping-json-server.service';
 import { PeopleMappingStrapi } from './impl/people-mapping-strapi.service';
 import { StrapiAuthMappingService } from '../services/impl/strapi-auth-mapping.service';
+import { GroupsMappingJsonServer } from './impl/groups-mapping-json-server.service';
+import { GroupsMappingStrapi } from './impl/groups-mapping-strapi.service';
 
 export function createBaseRepositoryFactory<T extends Model>(
   token: InjectionToken<IBaseRepository<T>>,
@@ -42,20 +44,27 @@ export function createBaseRepositoryFactory<T extends Model>(
   };
 };
 
-export function createBaseMappingFactory<T extends Model>(token: InjectionToken<IBaseMapping<T>>,
-  dependencies:any[]): FactoryProvider {
+export function createBaseMappingFactory<T extends Model>(
+  token: InjectionToken<IBaseMapping<T>>,
+  dependencies: any[],
+  modelType: 'person' | 'group'
+): FactoryProvider {
   return {
     provide: token,
     useFactory: (backend: string) => {
       switch (backend) {
-        case 'http':
-          throw new Error("BACKEND NOT IMPLEMENTED");
         case 'local-storage':
-          return new PeopleLocalStorageMapping();
+          return modelType === 'person' 
+            ? new PeopleLocalStorageMapping()
+            : null;
         case 'json-server':
-          return new PeopleMappingJsonServer();
+          return modelType === 'person'
+            ? new PeopleMappingJsonServer()
+            : new GroupsMappingJsonServer();
         case 'strapi':
-          return new PeopleMappingStrapi();
+          return modelType === 'person'
+            ? new PeopleMappingStrapi()
+            : new GroupsMappingStrapi();
         default:
           throw new Error("BACKEND NOT IMPLEMENTED");
       }
@@ -92,8 +101,18 @@ export const GroupsRepositoryFactory: FactoryProvider = createBaseRepositoryFact
   [BACKEND_TOKEN, HttpClient, GROUPS_API_URL_TOKEN, GROUPS_RESOURCE_NAME_TOKEN, GROUPS_REPOSITORY_MAPPING_TOKEN]
 );
 
-export const PeopleMappingFactory: FactoryProvider = createBaseMappingFactory<Person>(PEOPLE_REPOSITORY_MAPPING_TOKEN, [BACKEND_TOKEN]);
-export const GroupsMappingFactory: FactoryProvider = createBaseMappingFactory<Group>(GROUPS_REPOSITORY_MAPPING_TOKEN, [BACKEND_TOKEN]);
+export const PeopleMappingFactory = createBaseMappingFactory<Person>(
+  PEOPLE_REPOSITORY_MAPPING_TOKEN, 
+  [BACKEND_TOKEN],
+  'person'
+);
+
+export const GroupsMappingFactory = createBaseMappingFactory<Group>(
+  GROUPS_REPOSITORY_MAPPING_TOKEN, 
+  [BACKEND_TOKEN],
+  'group'
+);
+
 export const AuthMappingFactory: FactoryProvider = createBaseAuthMappingFactory(AUTH_MAPPING_TOKEN, [BACKEND_TOKEN]);
 
 export const AuthenticationServiceFactory:FactoryProvider = {

@@ -58,10 +58,15 @@ export interface Meta {}
             return this.getOne(d);
         })};
     }
-    getOne(data: Data):Group {
+    getOne(data: Data | GroupRaw): Group {
+        const isGroupRaw = (data: Data | GroupRaw): data is GroupRaw => 'meta' in data;
+        
+        const attributes = isGroupRaw(data) ? data.data.attributes : data.attributes;
+        const id = isGroupRaw(data) ? data.data.id : data.id;
+
         return {
-            id:data.id.toString(), 
-            name:data.attributes.name
+            id: id.toString(),
+            name: attributes.name
         };
     }
     getAdded(data: GroupRaw):Group {
