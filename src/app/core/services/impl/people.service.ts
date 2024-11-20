@@ -5,6 +5,7 @@ import { IPeopleService } from '../interfaces/people-service.interface';
 import { Person } from '../../models/person.model';
 import { PEOPLE_REPOSITORY_TOKEN } from '../../repositories/repository.tokens';
 import { IPeopleRepository } from '../../repositories/intefaces/people-repository.interface';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,13 @@ export class PeopleService extends BaseService<Person> implements IPeopleService
   ) {
     super(repository);
   }
-
+  
   // Implementa métodos específicos si los hay
+  getByUserId(userId: string): Observable<Person | null> {
+    return this.repository.getAll(1, 1, {user: userId}).pipe(
+      map(res => Array.isArray(res) ? res[0] || null : res.data[0] || null)
+    );
+  }
+
+  
 }

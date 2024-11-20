@@ -2,9 +2,17 @@ import { Injectable } from "@angular/core";
 import { IBaseMapping } from "../intefaces/base-mapping.interface";
 import { Paginated } from "../../models/paginated.model";
 import { Person } from "../../models/person.model";
+import { StrapiMedia } from "../../services/impl/strapi-media.service";
 
+
+export interface MediaRaw{
+    data: StrapiMedia
+}
+export interface UserRaw{
+    data: any
+}
 export interface GroupRaw{
-    data: Data
+    data: any
 }
 
 export interface PersonRaw {
@@ -28,7 +36,9 @@ export interface PersonAttributes {
     createdAt?: string
     updatedAt?: string
     publishedAt?: string
-    group:GroupRaw | number | null
+    group:GroupRaw | number | null,
+    user:UserRaw | number | null,
+    picture:MediaRaw | number | null
 }
 
 export interface GroupAttributes {
@@ -59,35 +69,37 @@ export interface Meta {}
                 name:data.name,
                 surname:data.surname,
                 gender: this.toGenderMapping[data.gender],
-                group:Number(data.groupId)??null
-
+                group:data.groupId?Number(data.groupId):null,
+                user:data.userId?Number(data.userId):null,
+                picture:data.picture?Number(data.picture):null
             }
         };
     }
-    setUpdate(data: Person):PersonData {
-        let toReturn:PersonData = {
-            data:{
-                name:"",
-                surname:"",
-                gender:"male",
-                group:null
-            }
-        };  
-        Object.keys(data).forEach(key=>{
+    setUpdate(data: Partial<Person>): PersonData {
+        const mappedData: Partial<PersonAttributes> = {};
+
+        Object.keys(data).forEach(key => {
             switch(key){
-                case 'name': toReturn.data['name']=data[key];
+                case 'name': mappedData.name = data[key];
                 break;
-                case 'surname': toReturn.data['surname']=data[key];
+                case 'surname': mappedData.surname = data[key];
                 break;
-                case 'gender': toReturn.data['gender']=data[key]=='Masculino'?'male':data[key]=='Femenino'?'female':'other';
+                case 'gender': mappedData.gender = this.toGenderMapping[data[key]!];
                 break;
-                case 'groupId': toReturn.data['group']=Number(data[key])??null;
+                case 'groupId': mappedData.group = data[key] ? Number(data[key]) : null;
                 break;
-                default:
+                case 'userId': mappedData.user = data[key] ? Number(data[key]) : null;
+                break;
+                case 'picture': mappedData.picture = data[key] ? Number(data[key]) : null;
+                break;
             }
         });
-        return toReturn;
+
+        return {
+            data: mappedData as PersonAttributes
+        };
     }
+
     getPaginated(page:number, pageSize: number, pages:number, data:Data[]): Paginated<Person> {
         return {page:page, pageSize:pageSize, pages:pages, data:data.map<Person>((d:Data|PersonRaw)=>{
             return this.getOne(d);
@@ -104,7 +116,15 @@ export interface Meta {}
             name: attributes.name,
             surname: attributes.surname,
             groupId: typeof attributes.group === 'object' ? attributes.group?.data?.id.toString() : undefined,
-            gender: this.fromGenderMapping[attributes.gender]
+            gender: this.fromGenderMapping[attributes.gender],
+            userId: typeof attributes.user === 'object' ? attributes.user?.data?.id.toString() : undefined,
+            picture: typeof attributes.picture === 'object' ? {
+                url: attributes.picture?.data?.attributes?.url,
+                large: attributes.picture?.data?.attributes?.formats?.large?.url || attributes.picture?.data?.attributes?.url,
+                medium: attributes.picture?.data?.attributes?.formats?.medium?.url || attributes.picture?.data?.attributes?.url,
+                small: attributes.picture?.data?.attributes?.formats?.small?.url || attributes.picture?.data?.attributes?.url,
+                thumbnail: attributes.picture?.data?.attributes?.formats?.thumbnail?.url || attributes.picture?.data?.attributes?.url,
+            } : undefined
         };
     }
     getAdded(data: PersonRaw):Person {

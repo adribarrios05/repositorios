@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { User } from 'src/app/core/models/auth.model';
 import { BaseAuthenticationService } from 'src/app/core/services/impl/base-authentication.service';
+import { PeopleService } from 'src/app/core/services/impl/people.service';
 import { passwordsMatchValidator, passwordValidator } from 'src/app/core/utils/validators';
 
 @Component({
@@ -17,7 +19,8 @@ export class RegisterPage {
     private fb: FormBuilder,
     private router: Router,
     private route:ActivatedRoute,
-    private authSvc:BaseAuthenticationService
+    private authSvc:BaseAuthenticationService,
+    private peopleSvc:PeopleService
   ) {
     this.registerForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
@@ -32,15 +35,24 @@ export class RegisterPage {
   onSubmit() {
     if (this.registerForm.valid) {
       this.authSvc.signUp(this.registerForm.value).subscribe({
-        next: resp=>{
-          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
-          this.router.navigateByUrl(returnUrl); // Redirige a la página solicitada
+        next: (resp:User) => {
+          const userData = {
+            ...this.registerForm.value,
+            userId: resp.id.toString()
+          };
+          
+          this.peopleSvc.add(userData).subscribe({
+            next: resp => {
+              const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
+              this.router.navigateByUrl(returnUrl);
+            },
+            error: err => {}
+          });
         },
-        error: err=>{
+        error: err => {
           console.log(err);
         }
       });
-      
     } else {
       console.log('Formulario no válido');
     }

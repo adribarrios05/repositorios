@@ -24,7 +24,8 @@
         <ion-item (click)="menu.close()" routerLink="/home" routerDirection="root">{{ 'MENU.HOME' | translate }}</ion-item>
         <ion-item (click)="menu.close()" *ngIf="(authSvc.authenticated$ | async)" routerLink="/people" routerDirection="root">{{ 'MENU.PEOPLE' | translate }}</ion-item>
         <ion-item (click)="menu.close()" *ngIf="(authSvc.authenticated$ | async)" routerLink="/groups" routerDirection="root">{{ 'MENU.GROUPS' | translate }}</ion-item>
-        <ion-item (click)="menu.close()" *ngIf="(authSvc.authenticated$ | async)" (click)="logout()">{{ 'MENU.LOGOUT' | translate }}</ion-item>
+        <ion-item (click)="menu.close()" *ngIf="(authSvc.authenticated$ | async)" routerLink="/profile" routerDirection="root">{{ 'MENU.PROFILE' | translate }}</ion-item>
+        <ion-item (click)="menu.close()" *ngIf="(authSvc.authenticated$ | async)" (click)="logout()" button>{{ 'MENU.LOGOUT' | translate }}</ion-item>
       </ion-list>
     </ion-content>
     <ion-footer>

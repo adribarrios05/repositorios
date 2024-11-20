@@ -23,7 +23,7 @@
       <!-- Vista para web -->
       <ion-item *ngIf="isWeb">
         <ion-avatar slot="start" #avatar>
-          <img src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+          <img [src]="person.picture?.url || 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
         </ion-avatar>
         <ion-label>
           <h2>{{person.name}}</h2>
@@ -42,7 +42,7 @@
       <!-- Vista para móvil -->
       <ion-item *ngIf="!isWeb">
         <ion-avatar slot="start" #avatar>
-          <img src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+          <img [src]="person.picture?.url || 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
         </ion-avatar>
         <ion-label>
           <h2>{{person.name}}</h2>

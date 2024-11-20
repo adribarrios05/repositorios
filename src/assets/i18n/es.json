@@ -2,7 +2,14 @@
   "COMMON": {
     "LANGUAGE": "Idioma",
     "SPANISH": "Español",
-    "ENGLISH": "Inglés"
+    "ENGLISH": "Inglés",
+    "ERROR": {
+      "LOAD": "Error al cargar los datos",
+      "SAVE": "Error al guardar los cambios"
+    },
+    "SUCCESS": {
+      "SAVE": "Cambios guardados correctamente"
+    }
   },
   "PEOPLE": {
     "TITLE": "Personas",
@@ -38,6 +45,7 @@
     "GENDER": "Género",
     "GROUP": "Grupo",
     "SUBMIT": "Registrar",
+    "UPDATE": "Actualizar",
     "ERRORS": {
       "NAME_REQUIRED": "El nombre es obligatorio",
       "NAME_MIN_LENGTH": "El nombre debe tener al menos 2 caracteres",
@@ -60,6 +68,12 @@
     "HOME": "Inicio",
     "PEOPLE": "Personas",
     "GROUPS": "Grupos",
-    "LOGOUT": "Cerrar sesión"
+    "LOGOUT": "Cerrar sesión",
+    "PROFILE": "Perfil"
+  },
+  "PROFILE": {
+    "TITLE": "Perfil",
+    "SUBTITLE": "Tu información personal",
+    "UPDATE": "Actualizar"
   }
 } 

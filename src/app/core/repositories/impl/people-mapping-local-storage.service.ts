@@ -13,7 +13,10 @@ interface PersonRaw{
     age:number,
     genero:string,
     picture:{
-        large:string
+        url:string,
+        large:string,
+        medium:string,
+        small:string,
         thumbnail:string
     }
 }
@@ -41,7 +44,10 @@ interface PersonRaw{
             age:data.age,
             gender:data.genero,
             picture:{
+                url:data.picture.url,
                 large:data.picture.large, 
+                medium:data.picture.medium,
+                small:data.picture.small,
                 thumbnail:data.picture.thumbnail
             }};
     }

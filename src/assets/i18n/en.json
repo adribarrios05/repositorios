@@ -2,7 +2,14 @@
   "COMMON": {
     "LANGUAGE": "Language",
     "SPANISH": "Spanish",
-    "ENGLISH": "English"
+    "ENGLISH": "English",
+    "ERROR": {
+      "LOAD": "Error loading data",
+      "SAVE": "Error saving changes"
+    },
+    "SUCCESS": {
+      "SAVE": "Changes saved successfully"
+    }
   },
   "PEOPLE": {
     "TITLE": "People",
@@ -38,6 +45,7 @@
     "GENDER": "Gender",
     "GROUP": "Group",
     "SUBMIT": "Register",
+    "UPDATE": "Update",
     "ERRORS": {
       "NAME_REQUIRED": "Name is required",
       "NAME_MIN_LENGTH": "Name must be at least 2 characters long",
@@ -60,6 +68,11 @@
     "HOME": "Home",
     "PEOPLE": "People",
     "GROUPS": "Groups",
-    "LOGOUT": "Logout"
+    "LOGOUT": "Logout",
+    "PROFILE": "Profile"
+  },
+  "PROFILE": {
+    "TITLE": "Profile",
+    "SUBTITLE": "Your personal information"
   }
 } 

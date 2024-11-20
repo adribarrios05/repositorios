@@ -3,11 +3,13 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { IBaseRepository, SearchParams } from '../intefaces/base-repository.interface';
-import { API_URL_TOKEN, REPOSITORY_MAPPING_TOKEN, RESOURCE_NAME_TOKEN } from '../repository.tokens';
+import { API_URL_TOKEN, AUTH_TOKEN, REPOSITORY_MAPPING_TOKEN, RESOURCE_NAME_TOKEN } from '../repository.tokens';
 import { Model } from '../../models/base.model';
 import { IBaseMapping } from '../intefaces/base-mapping.interface';
 import { Paginated } from '../../models/paginated.model';
 import { BaseRepositoryHttpService } from './base-repository-http.service';
+import { BaseAuthenticationService } from '../../services/impl/base-authentication.service';
+import { IAuthentication } from '../../services/interfaces/authentication.interface';
 
 export interface PaginatedRaw<T> {
   first: number
@@ -26,11 +28,12 @@ export class JsonServerRepositoryService<T extends Model> extends BaseRepository
 
   constructor(
     http: HttpClient,
+    @Inject(AUTH_TOKEN) auth: IAuthentication,
     @Inject(API_URL_TOKEN) apiUrl: string, // URL base de la API para el modelo
     @Inject(RESOURCE_NAME_TOKEN) resource:string, //nombre del recurso del repositorio
     @Inject(REPOSITORY_MAPPING_TOKEN) mapping:IBaseMapping<T>
   ) {
-    super(http, apiUrl, resource, mapping);
+    super(http, auth, apiUrl, resource, mapping);
   }
 
   override getAll(page:number, pageSize:number, filters:SearchParams = {}): Observable<T[] | Paginated<T>> {

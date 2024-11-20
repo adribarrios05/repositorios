@@ -75,7 +75,10 @@ export interface PersonRaw {
             groupId:(data as any)["grupoId"]??'',
             gender:this.fromGenderMapping[data.genero],
             picture:(data as any)["picture"]?{
+                url:(data as any)["picture"].url,
                 large:(data as any)["picture"].large, 
+                medium:(data as any)["picture"].medium,
+                small:(data as any)["picture"].small,
                 thumbnail:(data as any)["picture"].thumbnail
             }:undefined};
     }
