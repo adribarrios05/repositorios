@@ -5,30 +5,59 @@ import { Person } from "../../models/person.model";
 import { StrapiMedia } from "../../services/impl/strapi-media.service";
 
 
-export interface MediaRaw{
+interface MediaRaw{
     data: StrapiMedia
 }
-export interface UserRaw{
-    data: any
-}
-export interface GroupRaw{
-    data: any
+interface UserRaw{
+    data: UserData
 }
 
-export interface PersonRaw {
+interface UserData{
+    id: number
+    attributes: UserAttributes
+}
+
+interface UserAttributes {
+    username: string
+    email: string
+    provider: string
+    confirmed: boolean
+    blocked: boolean
+    createdAt: string
+    updatedAt: string
+  }
+interface GroupRaw{
+    data: GroupData,
+    meta: Meta
+}
+
+interface GroupData {
+    id: number
+    attributes: GroupAttributes
+}
+  
+interface GroupAttributes {
+    name: string
+    createdAt: string
+    updatedAt: string
+    publishedAt: string
+}
+  
+
+interface PersonRaw {
     data: Data
     meta: Meta
   }
   
-export interface Data {
+interface Data {
     id: number
     attributes: PersonAttributes
 }
-export interface PersonData {
+interface PersonData {
     data: PersonAttributes;
 }
 
-export interface PersonAttributes {
+interface PersonAttributes {
     name: string
     surname: string
     gender: string
@@ -41,11 +70,11 @@ export interface PersonAttributes {
     picture:MediaRaw | number | null
 }
 
-export interface GroupAttributes {
+interface GroupAttributes {
     name: string
 }
 
-export interface Meta {}
+interface Meta {}
 
 @Injectable({
     providedIn: 'root'

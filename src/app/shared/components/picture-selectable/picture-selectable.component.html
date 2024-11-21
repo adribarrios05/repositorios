@@ -11,26 +11,32 @@
           </ion-toolbar>
         </ion-header>
         <div class="inner-content">
-            <ion-img [src]="picture$ | async"></ion-img>
+            <img [src]="picture$ | async"/>
         </div>
       </ng-template>
     </ion-modal>
     <ion-img id="picture"  [src]="picture$ | async"></ion-img>
     <ion-button *ngIf="!isDisabled"
-      style="position:absolute;top:0;right:0;--background:rgba(var(--ion-color-primary-rgb), 0.7);"
-      expand="full" (click)="onChangePicture($event, fileLoader)">
-        <ion-icon slot="icon-only" name="image"  ></ion-icon>
+      class="change-picture-btn"
+      expand="full" 
+      (click)="onChangePicture($event, fileLoader)">
+        <ion-icon slot="icon-only" name="image"></ion-icon>
     </ion-button>
     <ion-button *ngIf="!isDisabled"
-      style="position:absolute;top:40px;right:0;--background:rgba(var(--ion-color-danger-rgb), 0.7);"
-      expand="full" (click)="onDeletePicture($event)">
-        <ion-icon slot="icon-only" name="trash"  ></ion-icon>
+      class="delete-picture-btn"
+      expand="full" 
+      (click)="onDeletePicture($event)">
+        <ion-icon slot="icon-only" name="trash"></ion-icon>
     </ion-button>
   </ng-container>
   
-  <ion-button color="medium" *ngIf="!isDisabled && !hasValue"
-  style="height:100%;width:100%"
-  expand="full" fill="clear" (click)="onChangePicture($event,fileLoader)">
-    <ion-icon name="image" style="width:100%;height:100%"></ion-icon>
+  <ion-button 
+    color="medium" 
+    *ngIf="!isDisabled && !hasValue"
+    class="empty-picture-btn"
+    expand="full" 
+    fill="clear" 
+    (click)="onChangePicture($event,fileLoader)">
+      <ion-icon name="image" class="empty-picture-icon"></ion-icon>
   </ion-button>
 </div>

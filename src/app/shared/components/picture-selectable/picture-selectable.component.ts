@@ -9,6 +9,10 @@ export const PICTURE_SELECTABLE_VALUE_ACCESSOR: any = {
   multi: true
 };
 
+/**
+ * Componente para seleccionar y gestionar imágenes
+ * Implementa ControlValueAccessor para integrarse con formularios reactivos de Angular
+ */
 @Component({
   selector: 'app-picture-selectable',
   templateUrl: './picture-selectable.component.html',
@@ -17,23 +21,33 @@ export const PICTURE_SELECTABLE_VALUE_ACCESSOR: any = {
 })
 export class PictureSelectableComponent  implements OnInit, ControlValueAccessor, OnDestroy {
 
+  /** Subject que mantiene el valor actual de la imagen */
   private _picture = new BehaviorSubject("");
+  /** Observable público para la imagen seleccionada */
   public picture$ = this._picture.asObservable();
+  /** Indica si el componente está deshabilitado */
   isDisabled:boolean = false;
+  /** Indica si hay una imagen seleccionada */
   hasValue:boolean = false;
   constructor(
     private pictureModal:ModalController
   ) { }
 
+  /** Limpia los recursos al destruir el componente */
   ngOnDestroy(): void {
     this._picture.complete();
   }
 
   ngOnInit() {}
 
+  /** Función que propaga los cambios al formulario padre */
   propagateChange = (obj: any) => {
   }
 
+  /**
+   * Establece el valor del componente desde el formulario
+   * @param obj Valor a establecer (URL de la imagen)
+   */
   writeValue(obj: any): void {
     if(obj){
       this.hasValue = true;
@@ -52,12 +66,21 @@ export class PictureSelectableComponent  implements OnInit, ControlValueAccessor
     this.isDisabled = isDisabled;
   }
 
+  /**
+   * Cambia la imagen actual y propaga el cambio
+   * @param picture Nueva URL de la imagen
+   */
   changePicture(picture:string){
     this.hasValue = picture!='';
     this._picture.next(picture);
     this.propagateChange(picture);
   }
 
+  /**
+   * Maneja el evento de cambio de imagen desde un input file
+   * @param event Evento del DOM
+   * @param fileLoader Elemento input file
+   */
   onChangePicture(event:Event, fileLoader:HTMLInputElement){
     event.stopPropagation();
     fileLoader.onchange = ()=>{
@@ -76,11 +99,16 @@ export class PictureSelectableComponent  implements OnInit, ControlValueAccessor
     fileLoader.click();
   }
 
+  /**
+   * Elimina la imagen actual
+   * @param event Evento del DOM
+   */
   onDeletePicture(event:Event){
     event.stopPropagation();
     this.changePicture('');
   }
 
+  /** Cierra el modal de selección de imagen */
   close(){
     this.pictureModal?.dismiss();
   }
