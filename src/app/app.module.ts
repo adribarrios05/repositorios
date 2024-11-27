@@ -27,6 +27,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { SharedModule } from './shared/shared.module';
+import { environment } from 'src/environments/environment';
 
 // Factory function para el loader de traducción
 export function createTranslateLoader(http: HttpClient) {
@@ -62,12 +63,12 @@ export function createTranslateLoader(http: HttpClient) {
     { provide: BACKEND_TOKEN, useValue: 'strapi' },
     { provide: PEOPLE_RESOURCE_NAME_TOKEN, useValue: 'people' },
     { provide: GROUPS_RESOURCE_NAME_TOKEN, useValue: 'groups' },
-    { provide: PEOPLE_API_URL_TOKEN, useValue: 'http://localhost:1337/api' },
-    { provide: GROUPS_API_URL_TOKEN, useValue: 'http://localhost:1337/api' },
-    { provide: AUTH_SIGN_IN_API_URL_TOKEN, useValue: 'http://localhost:1337/api/auth/local' },
-    { provide: AUTH_SIGN_UP_API_URL_TOKEN, useValue: 'http://localhost:1337/api/auth/local/register' },
-    { provide: AUTH_ME_API_URL_TOKEN, useValue: 'http://localhost:1337/api/users/me' },
-    { provide: UPLOAD_API_URL_TOKEN, useValue: 'http://localhost:1337/api/upload' },
+    { provide: PEOPLE_API_URL_TOKEN, useValue: `${environment.apiUrl}/api` },
+    { provide: GROUPS_API_URL_TOKEN, useValue: `${environment.apiUrl}/api` },
+    { provide: AUTH_SIGN_IN_API_URL_TOKEN, useValue: `${environment.apiUrl}/api/auth/local` },
+    { provide: AUTH_SIGN_UP_API_URL_TOKEN, useValue: `${environment.apiUrl}/api/auth/local/register` },
+    { provide: AUTH_ME_API_URL_TOKEN, useValue: `${environment.apiUrl}/api/users/me` },
+    { provide: UPLOAD_API_URL_TOKEN, useValue: `${environment.apiUrl}/api/upload` },
     
     PeopleMappingFactory,
     GroupsMappingFactory,
