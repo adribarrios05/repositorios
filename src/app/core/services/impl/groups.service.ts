@@ -8,16 +8,19 @@ import { IPeopleRepository } from '../../repositories/intefaces/people-repositor
 import { IGroupsService } from '../interfaces/groups-service.interface';
 import { Group } from '../../models/group.model';
 import { IGroupsRepository } from '../../repositories/intefaces/groups-repository.interface';
+import { Observable } from 'rxjs';
+import { Paginated } from '../../models/paginated.model';
+import { IBaseRepository, SearchParams } from '../../repositories/intefaces/base-repository.interface';
+
 
 @Injectable({
   providedIn: 'root'
 })
-export class GroupsService extends BaseService<Group> implements IGroupsService {
+export class GroupsService extends BaseService<Group> {
   constructor(
-    @Inject(GROUPS_REPOSITORY_TOKEN) repository: IGroupsRepository
+    @Inject(GROUPS_REPOSITORY_TOKEN) repository: IBaseRepository<Group>
   ) {
     super(repository);
   }
 
-  // Implementa métodos específicos si los hay
 }

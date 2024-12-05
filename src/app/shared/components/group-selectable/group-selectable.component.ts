@@ -47,7 +47,7 @@ export class GroupSelectableComponent  implements OnInit, ControlValueAccessor, 
 
   private async loadGroups(filter:string){
     this.page = 1;
-    this.groupsSvc.getAll(this.page, this.pageSize).subscribe({
+    this.groupsSvc.getAll(this.page, this.pageSize, {"name":filter}).subscribe({
       next:response=>{
         this._groups.next([...response.data]);
         this.page++;
