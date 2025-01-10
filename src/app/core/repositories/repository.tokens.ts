@@ -32,3 +32,5 @@ export const AUTH_TOKEN = new InjectionToken<IAuthentication>('IAuthentication')
 export const STRAPI_AUTH_TOKEN = new InjectionToken<IStrapiAuthentication>('IStrapiAuthentication');
 export const AUTH_MAPPING_TOKEN = new InjectionToken<IBaseMapping<Person>>('IAuthMapping');
 export const BACKEND_TOKEN = new InjectionToken<string>('Backend');
+export const FIREBASE_CONFIG_TOKEN = new InjectionToken<any>('FIREBASE_CONFIG_TOKEN');
+export const FIREBASE_COLLECTION_TOKEN = new InjectionToken<string>('FIREBASE_COLLECTION_TOKEN');

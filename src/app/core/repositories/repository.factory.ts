@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { BaseRepositoryHttpService } from './impl/base-repository-http.service';
 import { IBaseRepository } from './intefaces/base-repository.interface';
 import { Person } from '../models/person.model';
-import { AUTH_MAPPING_TOKEN, AUTH_ME_API_URL_TOKEN, AUTH_SIGN_IN_API_URL_TOKEN, AUTH_SIGN_UP_API_URL_TOKEN, BACKEND_TOKEN, GROUPS_API_URL_TOKEN, GROUPS_REPOSITORY_MAPPING_TOKEN, GROUPS_REPOSITORY_TOKEN, GROUPS_RESOURCE_NAME_TOKEN, PEOPLE_API_URL_TOKEN, PEOPLE_REPOSITORY_MAPPING_TOKEN, PEOPLE_REPOSITORY_TOKEN, PEOPLE_RESOURCE_NAME_TOKEN, UPLOAD_API_URL_TOKEN } from './repository.tokens';
+import { AUTH_MAPPING_TOKEN, AUTH_ME_API_URL_TOKEN, AUTH_SIGN_IN_API_URL_TOKEN, AUTH_SIGN_UP_API_URL_TOKEN, BACKEND_TOKEN, GROUPS_API_URL_TOKEN, GROUPS_REPOSITORY_MAPPING_TOKEN, GROUPS_REPOSITORY_TOKEN, GROUPS_RESOURCE_NAME_TOKEN, PEOPLE_API_URL_TOKEN, PEOPLE_REPOSITORY_MAPPING_TOKEN, PEOPLE_REPOSITORY_TOKEN, PEOPLE_RESOURCE_NAME_TOKEN, UPLOAD_API_URL_TOKEN, FIREBASE_CONFIG_TOKEN } from './repository.tokens';
 import { BaseRespositoryLocalStorageService } from './impl/base-repository-local-storage.service';
 import { Model } from '../models/base.model';
 import { IBaseMapping } from './intefaces/base-mapping.interface';
@@ -23,13 +23,18 @@ import { GroupsMappingStrapi } from './impl/groups-mapping-strapi.service';
 import { IStrapiAuthentication } from '../services/interfaces/strapi-authentication.interface';
 import { StrapiMediaService } from '../services/impl/strapi-media.service';
 import { BaseMediaService } from '../services/impl/base-media.service';
+import { BaseRepositoryFirebaseService } from './impl/base-repository-firebase.service';
+import { PeopleMappingFirebaseService } from './impl/people-mapping-firebase.service';
+import { FirebaseAuthenticationService } from '../services/impl/firebase-authentication.service';
+import { FirebaseAuthMappingService } from '../services/impl/firebase-auth-mapping.service';
+import { GroupsMappingFirebaseService } from './impl/groups-mapping-firebase.service';
 
 export function createBaseRepositoryFactory<T extends Model>(
   token: InjectionToken<IBaseRepository<T>>,
   dependencies:any[]): FactoryProvider {
   return {
     provide: token,
-    useFactory: (backend: string, http: HttpClient, auth:IStrapiAuthentication, apiURL: string, resource: string, mapping: IBaseMapping<T>) => {
+    useFactory: (backend: string, http: HttpClient, auth:IStrapiAuthentication, apiURL: string, resource: string, mapping: IBaseMapping<T>, firebaseConfig?: any) => {
       switch (backend) {
         case 'http':
           return new BaseRepositoryHttpService<T>(http, auth, apiURL, resource, mapping);
@@ -39,6 +44,8 @@ export function createBaseRepositoryFactory<T extends Model>(
           return new JsonServerRepositoryService<T>(http, auth,apiURL, resource, mapping);
         case 'strapi':
           return new StrapiRepositoryService<T>(http, auth, apiURL, resource, mapping);
+        case 'firebase':
+          return new BaseRepositoryFirebaseService<T>(firebaseConfig, resource, mapping);
         default:
           throw new Error("BACKEND NOT IMPLEMENTED");
       }
@@ -54,7 +61,7 @@ export function createBaseMappingFactory<T extends Model>(
 ): FactoryProvider {
   return {
     provide: token,
-    useFactory: (backend: string) => {
+    useFactory: (backend: string, firebaseConfig?: any) => {
       switch (backend) {
         case 'local-storage':
           return modelType === 'person' 
@@ -68,6 +75,10 @@ export function createBaseMappingFactory<T extends Model>(
           return modelType === 'person'
             ? new PeopleMappingStrapi()
             : new GroupsMappingStrapi();
+        case 'firebase':
+          return modelType === 'person'
+            ? new PeopleMappingFirebaseService(firebaseConfig)
+            : new GroupsMappingFirebaseService(firebaseConfig);
         default:
           throw new Error("BACKEND NOT IMPLEMENTED");
       }
@@ -87,8 +98,11 @@ export function createBaseAuthMappingFactory(token: InjectionToken<IAuthMapping>
           throw new Error("BACKEND NOT IMPLEMENTED");
         case 'json-server':
           throw new Error("BACKEND NOT IMPLEMENTED");
+        
         case 'strapi':
           return new StrapiAuthMappingService();
+        case 'firebase':
+          return new FirebaseAuthMappingService();
         default:
           throw new Error("BACKEND NOT IMPLEMENTED");
       }
@@ -100,13 +114,13 @@ export function createBaseAuthMappingFactory(token: InjectionToken<IAuthMapping>
 
 export const PeopleMappingFactory = createBaseMappingFactory<Person>(
   PEOPLE_REPOSITORY_MAPPING_TOKEN, 
-  [BACKEND_TOKEN],
+  [BACKEND_TOKEN, FIREBASE_CONFIG_TOKEN],
   'person'
 );
 
 export const GroupsMappingFactory = createBaseMappingFactory<Group>(
   GROUPS_REPOSITORY_MAPPING_TOKEN, 
-  [BACKEND_TOKEN],
+  [BACKEND_TOKEN, FIREBASE_CONFIG_TOKEN],
   'group'
 );
 
@@ -114,7 +128,7 @@ export const AuthMappingFactory: FactoryProvider = createBaseAuthMappingFactory(
 
 export const AuthenticationServiceFactory:FactoryProvider = {
   provide: BaseAuthenticationService,
-  useFactory: (backend:string, signIn:string, signUp:string, meUrl:string, mapping:IAuthMapping, http:HttpClient) => {
+  useFactory: (backend:string, firebaseConfig:any, signIn:string, signUp:string, meUrl:string, mapping:IAuthMapping, http:HttpClient) => {
     switch(backend){
       case 'http':
         throw new Error("BACKEND NOT IMPLEMENTED");
@@ -124,17 +138,19 @@ export const AuthenticationServiceFactory:FactoryProvider = {
         throw new Error("BACKEND NOT IMPLEMENTED");
       case 'strapi':
         return new StrapiAuthenticationService(signIn, signUp, meUrl, mapping, http);
+      case 'firebase':
+        return new FirebaseAuthenticationService(firebaseConfig, mapping);
       default:
         throw new Error("BACKEND NOT IMPLEMENTED");
     }
     
   },
-  deps: [BACKEND_TOKEN, AUTH_SIGN_IN_API_URL_TOKEN, AUTH_SIGN_UP_API_URL_TOKEN, AUTH_ME_API_URL_TOKEN, AUTH_MAPPING_TOKEN, HttpClient]
+  deps: [BACKEND_TOKEN, FIREBASE_CONFIG_TOKEN, AUTH_SIGN_IN_API_URL_TOKEN, AUTH_SIGN_UP_API_URL_TOKEN, AUTH_ME_API_URL_TOKEN, AUTH_MAPPING_TOKEN, HttpClient]
 };
 
 export const MediaServiceFactory:FactoryProvider = {
   provide: BaseMediaService,
-  useFactory: (backend:string, upload:string, auth:IStrapiAuthentication, http:HttpClient) => {
+  useFactory: (backend:string, firebaseConfig:any, upload:string, auth:IStrapiAuthentication, http:HttpClient) => {
     switch(backend){
       case 'http':
         throw new Error("BACKEND NOT IMPLEMENTED");
@@ -142,6 +158,7 @@ export const MediaServiceFactory:FactoryProvider = {
         throw new Error("BACKEND NOT IMPLEMENTED");
       case 'json-server':
         throw new Error("BACKEND NOT IMPLEMENTED");
+      case 'firebase':
       case 'strapi':
         return new StrapiMediaService(upload, auth, http);
       default:
@@ -149,12 +166,28 @@ export const MediaServiceFactory:FactoryProvider = {
     }
     
   },
-  deps: [BACKEND_TOKEN, UPLOAD_API_URL_TOKEN, BaseAuthenticationService, HttpClient]
+  deps: [BACKEND_TOKEN, FIREBASE_CONFIG_TOKEN, UPLOAD_API_URL_TOKEN, BaseAuthenticationService, HttpClient]
 };
 
 export const PeopleRepositoryFactory: FactoryProvider = createBaseRepositoryFactory<Person>(PEOPLE_REPOSITORY_TOKEN,
-  [BACKEND_TOKEN, HttpClient, BaseAuthenticationService, PEOPLE_API_URL_TOKEN, PEOPLE_RESOURCE_NAME_TOKEN, PEOPLE_REPOSITORY_MAPPING_TOKEN]
+  [
+    BACKEND_TOKEN, 
+    HttpClient, 
+    BaseAuthenticationService, 
+    PEOPLE_API_URL_TOKEN, 
+    PEOPLE_RESOURCE_NAME_TOKEN, 
+    PEOPLE_REPOSITORY_MAPPING_TOKEN,
+    FIREBASE_CONFIG_TOKEN
+  ]
 );
 export const GroupsRepositoryFactory: FactoryProvider = createBaseRepositoryFactory<Group>(GROUPS_REPOSITORY_TOKEN,
-  [BACKEND_TOKEN, HttpClient, BaseAuthenticationService, GROUPS_API_URL_TOKEN, GROUPS_RESOURCE_NAME_TOKEN, GROUPS_REPOSITORY_MAPPING_TOKEN]
+  [
+    BACKEND_TOKEN, 
+    HttpClient, 
+    BaseAuthenticationService, 
+    GROUPS_API_URL_TOKEN, 
+    GROUPS_RESOURCE_NAME_TOKEN, 
+    GROUPS_REPOSITORY_MAPPING_TOKEN,
+    FIREBASE_CONFIG_TOKEN
+  ]
 );

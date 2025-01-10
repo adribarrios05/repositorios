@@ -9,7 +9,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AuthenticationServiceFactory, AuthMappingFactory, GroupsMappingFactory, GroupsRepositoryFactory, MediaServiceFactory, PeopleMappingFactory, PeopleRepositoryFactory } from './core/repositories/repository.factory';
 import { PeopleService } from './core/services/impl/people.service';
-import { AUTH_MAPPING_TOKEN, AUTH_ME_API_URL_TOKEN, AUTH_SIGN_IN_API_URL_TOKEN, AUTH_SIGN_UP_API_URL_TOKEN, BACKEND_TOKEN, GROUPS_API_URL_TOKEN, GROUPS_REPOSITORY_MAPPING_TOKEN, GROUPS_RESOURCE_NAME_TOKEN, PEOPLE_API_URL_TOKEN, PEOPLE_REPOSITORY_MAPPING_TOKEN, PEOPLE_RESOURCE_NAME_TOKEN, UPLOAD_API_URL_TOKEN } from './core/repositories/repository.tokens';
+import { AUTH_MAPPING_TOKEN, AUTH_ME_API_URL_TOKEN, AUTH_SIGN_IN_API_URL_TOKEN, AUTH_SIGN_UP_API_URL_TOKEN, BACKEND_TOKEN, GROUPS_API_URL_TOKEN, GROUPS_REPOSITORY_MAPPING_TOKEN, GROUPS_RESOURCE_NAME_TOKEN, PEOPLE_API_URL_TOKEN, PEOPLE_REPOSITORY_MAPPING_TOKEN, PEOPLE_RESOURCE_NAME_TOKEN, UPLOAD_API_URL_TOKEN, FIREBASE_CONFIG_TOKEN } from './core/repositories/repository.tokens';
 import { provideHttpClient } from '@angular/common/http';
 import { PeopleLocalStorageMapping } from './core/repositories/impl/people-mapping-local-storage.service';
 import { PeopleMappingJsonServer } from './core/repositories/impl/people-mapping-json-server.service';
@@ -60,7 +60,7 @@ export function createTranslateLoader(http: HttpClient) {
       player: () => player,
     }),
     provideHttpClient(),
-    { provide: BACKEND_TOKEN, useValue: 'strapi' },
+    { provide: BACKEND_TOKEN, useValue: 'firebase' },
     { provide: PEOPLE_RESOURCE_NAME_TOKEN, useValue: 'people' },
     { provide: GROUPS_RESOURCE_NAME_TOKEN, useValue: 'groups' },
     { provide: PEOPLE_API_URL_TOKEN, useValue: `${environment.apiUrl}/api` },
@@ -69,6 +69,15 @@ export function createTranslateLoader(http: HttpClient) {
     { provide: AUTH_SIGN_UP_API_URL_TOKEN, useValue: `${environment.apiUrl}/api/auth/local/register` },
     { provide: AUTH_ME_API_URL_TOKEN, useValue: `${environment.apiUrl}/api/users/me` },
     { provide: UPLOAD_API_URL_TOKEN, useValue: `${environment.apiUrl}/api/upload` },
+    { provide: FIREBASE_CONFIG_TOKEN, useValue: 
+      {
+        apiKey: "AIzaSyCgX3qQHu1EisUWrOuQITrdiKhK2DEYsF8",
+        authDomain: "people-e038c.firebaseapp.com",
+        projectId: "people-e038c",
+        storageBucket: "people-e038c.appspot.com",
+        messagingSenderId: "399453954592",
+      } 
+    },
     
     PeopleMappingFactory,
     GroupsMappingFactory,
