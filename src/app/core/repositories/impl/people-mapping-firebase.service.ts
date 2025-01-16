@@ -50,10 +50,10 @@ export class PeopleMappingFirebaseService implements IBaseMapping<Person> {
     
     if (data.name) result.name = data.name;
     if (data.surname) result.surname = data.surname;
-    if (data.gender) result.gender = this.reverseGenderMapping[data.gender];
+    if (data.gender && this.reverseGenderMapping[data.gender]) result.gender = this.reverseGenderMapping[data.gender];
     if (data.groupId) result.groupId = doc(this.db, 'groups', data.groupId || '');
     if (data.userId) result.user = data.userId || '';
-    if (data.picture) result.picture = data.picture.url;
+    if (data.picture) result.picture = data.picture;
 
     return result;
   }
@@ -64,7 +64,7 @@ export class PeopleMappingFirebaseService implements IBaseMapping<Person> {
       name: data.name,
       surname: data.surname,
       age: data.age,
-      gender: data.gender,
+      gender: data.gender && this.genderMapping[data.gender] ? this.genderMapping[data.gender] : '',
       groupId: data.groupId?.id,
       userId: data.user || '',
       picture: data.picture ? {

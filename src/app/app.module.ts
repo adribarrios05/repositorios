@@ -74,8 +74,10 @@ export function createTranslateLoader(http: HttpClient) {
         apiKey: "AIzaSyCgX3qQHu1EisUWrOuQITrdiKhK2DEYsF8",
         authDomain: "people-e038c.firebaseapp.com",
         projectId: "people-e038c",
-        storageBucket: "people-e038c.appspot.com",
+        storageBucket: "people-e038c.firebasestorage.app",
         messagingSenderId: "399453954592",
+        appId: "1:399453954592:web:1409e06cd61b9b794c5245",
+        measurementId: "G-Z9Z69KX8X7"
       } 
     },
     
