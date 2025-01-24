@@ -28,6 +28,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { SharedModule } from './shared/shared.module';
 import { environment } from 'src/environments/environment';
+import { PeopleCollectionSubscriptionFactory, GroupsCollectionSubscriptionFactory } from './core/repositories/repository.factory';
 
 // Factory function para el loader de traducción
 export function createTranslateLoader(http: HttpClient) {
@@ -97,7 +98,9 @@ export function createTranslateLoader(http: HttpClient) {
       useClass: GroupsService
     },
     AuthenticationServiceFactory,
-    MediaServiceFactory
+    MediaServiceFactory,
+    PeopleCollectionSubscriptionFactory,
+    GroupsCollectionSubscriptionFactory
 
     // ... otros proveedores],
 

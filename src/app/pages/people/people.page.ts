@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { AlertController, AnimationController, InfiniteScrollCustomEvent, ModalController, Platform } from '@ionic/angular';
 import { BehaviorSubject, lastValueFrom, Observable, Subscription } from 'rxjs';
 import { Group } from 'src/app/core/models/group.model';
@@ -8,26 +8,17 @@ import { GroupsService } from 'src/app/core/services/impl/groups.service';
 import { PeopleService } from 'src/app/core/services/impl/people.service';
 import { TranslateService } from '@ngx-translate/core';
 import { PersonModalComponent } from 'src/app/shared/components/person-modal/person-modal.component';
+import { PEOPLE_COLLECTION_SUBSCRIPTION_TOKEN } from 'src/app/core/repositories/repository.tokens';
+import { ICollectionSubscription } from 'src/app/core/services/interfaces/collection-subscription.interface';
+import { CollectionChange } from 'src/app/core/services/interfaces/collection-subscription.interface';
 
-export class Country {
-  public id?: number;
-  public name?: string;
-  public ports?: Port[];
-}
-export class Port {
-  public id?: number;
-  public name?: string;
-  public country?: Country;
-}
+
 @Component({
   selector: 'app-people',
   templateUrl: './people.page.html',
   styleUrls: ['./people.page.scss'],
 })
 export class PeoplePage implements OnInit {
-  ports: Port[] = [];
-  port!: Port;
-  page_ = 2;
   portsSubscription!: Subscription;
   _people:BehaviorSubject<Person[]> = new BehaviorSubject<Person[]>([]);
   people$:Observable<Person[]> = this._people.asObservable();
@@ -42,6 +33,7 @@ export class PeoplePage implements OnInit {
     },
   ];
   isWeb: boolean = false;
+  private loadedIds: Set<string> = new Set(); // Mantener registro de IDs cargados
 
   constructor(
     private animationCtrl: AnimationController,
@@ -50,13 +42,42 @@ export class PeoplePage implements OnInit {
     private modalCtrl:ModalController,
     private translate: TranslateService,
     private alertCtrl: AlertController,
-    private platform: Platform
+    private platform: Platform,
+    @Inject(PEOPLE_COLLECTION_SUBSCRIPTION_TOKEN) 
+    private peopleSubscription: ICollectionSubscription<Person>
   ) {
     this.isWeb = this.platform.is('desktop');
   }
 
   ngOnInit(): void {
     this.loadGroups();
+    this.peopleSubscription.subscribe('people').subscribe((change: CollectionChange<Person>) => {
+      const currentPeople = [...this._people.value];
+      
+      // Solo procesar cambios de documentos que ya tenemos cargados
+      if (!this.loadedIds.has(change.id) && change.type !== 'added') {
+        return;
+      }
+
+      switch(change.type) {
+        case 'added':
+        case 'modified':
+          const index = currentPeople.findIndex(p => p.id === change.id);
+          if (index >= 0) {
+            currentPeople[index] = change.data!;
+          }
+          break;
+        case 'removed':
+          const removeIndex = currentPeople.findIndex(p => p.id === change.id);
+          if (removeIndex >= 0) {
+            currentPeople.splice(removeIndex, 1);
+            this.loadedIds.delete(change.id);
+          }
+          break;
+      }
+      
+      this._people.next(currentPeople);
+    });
   }
 
 
@@ -75,6 +96,8 @@ export class PeoplePage implements OnInit {
     this.page=1;
     this.peopleSvc.getAll(this.page, this.pageSize).subscribe({
       next:(response:Paginated<Person>)=>{
+        // Actualizar el registro de IDs cargados
+        response.data.forEach(person => this.loadedIds.add(person.id));
         this._people.next([...response.data]);
         this.page++;
         this.pages = response.pages;
@@ -87,6 +110,8 @@ export class PeoplePage implements OnInit {
     if(this.page<=this.pages){
       this.peopleSvc.getAll(this.page, this.pageSize).subscribe({
         next:(response:Paginated<Person>)=>{
+          // Actualizar el registro de IDs cargados
+          response.data.forEach(person => this.loadedIds.add(person.id));
           this._people.next([...this._people.value, ...response.data]);
           this.page++;
           notify?.complete();

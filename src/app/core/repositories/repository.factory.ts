@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { BaseRepositoryHttpService } from './impl/base-repository-http.service';
 import { IBaseRepository } from './intefaces/base-repository.interface';
 import { Person } from '../models/person.model';
-import { AUTH_MAPPING_TOKEN, AUTH_ME_API_URL_TOKEN, AUTH_SIGN_IN_API_URL_TOKEN, AUTH_SIGN_UP_API_URL_TOKEN, BACKEND_TOKEN, GROUPS_API_URL_TOKEN, GROUPS_REPOSITORY_MAPPING_TOKEN, GROUPS_REPOSITORY_TOKEN, GROUPS_RESOURCE_NAME_TOKEN, PEOPLE_API_URL_TOKEN, PEOPLE_REPOSITORY_MAPPING_TOKEN, PEOPLE_REPOSITORY_TOKEN, PEOPLE_RESOURCE_NAME_TOKEN, UPLOAD_API_URL_TOKEN, FIREBASE_CONFIG_TOKEN } from './repository.tokens';
+import { AUTH_MAPPING_TOKEN, AUTH_ME_API_URL_TOKEN, AUTH_SIGN_IN_API_URL_TOKEN, AUTH_SIGN_UP_API_URL_TOKEN, BACKEND_TOKEN, GROUPS_API_URL_TOKEN, GROUPS_REPOSITORY_MAPPING_TOKEN, GROUPS_REPOSITORY_TOKEN, GROUPS_RESOURCE_NAME_TOKEN, PEOPLE_API_URL_TOKEN, PEOPLE_REPOSITORY_MAPPING_TOKEN, PEOPLE_REPOSITORY_TOKEN, PEOPLE_RESOURCE_NAME_TOKEN, UPLOAD_API_URL_TOKEN, FIREBASE_CONFIG_TOKEN, COLLECTION_SUBSCRIPTION_TOKEN, PEOPLE_COLLECTION_SUBSCRIPTION_TOKEN, GROUPS_COLLECTION_SUBSCRIPTION_TOKEN } from './repository.tokens';
 import { BaseRespositoryLocalStorageService } from './impl/base-repository-local-storage.service';
 import { Model } from '../models/base.model';
 import { IBaseMapping } from './intefaces/base-mapping.interface';
@@ -30,6 +30,8 @@ import { FirebaseAuthMappingService } from '../services/impl/firebase-auth-mappi
 import { GroupsMappingFirebaseService } from './impl/groups-mapping-firebase.service';
 import { FirebaseMediaService } from '../services/impl/firebase-media.service';
 import { IAuthentication } from '../services/interfaces/authentication.interface';
+import { FirebaseCollectionSubscriptionService } from '../services/impl/firebase-collection-subscription.service';
+import { ICollectionSubscription } from '../services/interfaces/collection-subscription.interface';
 
 export function createBaseRepositoryFactory<T extends Model>(
   token: InjectionToken<IBaseRepository<T>>,
@@ -193,4 +195,36 @@ export const GroupsRepositoryFactory: FactoryProvider = createBaseRepositoryFact
     GROUPS_REPOSITORY_MAPPING_TOKEN,
     FIREBASE_CONFIG_TOKEN
   ]
+);
+
+export function createCollectionSubscriptionFactory<T extends Model>(
+  collectionName: string,
+  mappingToken: InjectionToken<IBaseMapping<T>>,
+  collectionSubscriptionToken: InjectionToken<ICollectionSubscription<T>>
+): FactoryProvider {
+  return {
+    provide: collectionSubscriptionToken,
+    useFactory: (backend: string, firebaseConfig: any, mapping: IBaseMapping<T>) => {
+      switch (backend) {
+        case 'firebase':
+          return new FirebaseCollectionSubscriptionService<T>(firebaseConfig, mapping);
+        default:
+          throw new Error("BACKEND NOT IMPLEMENTED");
+      }
+    },
+    deps: [BACKEND_TOKEN, FIREBASE_CONFIG_TOKEN, mappingToken]
+  };
+}
+
+// Factorías específicas para cada tipo
+export const PeopleCollectionSubscriptionFactory = createCollectionSubscriptionFactory<Person>(
+  'people',
+  PEOPLE_REPOSITORY_MAPPING_TOKEN,
+  PEOPLE_COLLECTION_SUBSCRIPTION_TOKEN
+);
+
+export const GroupsCollectionSubscriptionFactory = createCollectionSubscriptionFactory<Group>(
+  'groups',
+  GROUPS_REPOSITORY_MAPPING_TOKEN,
+  GROUPS_COLLECTION_SUBSCRIPTION_TOKEN
 );
