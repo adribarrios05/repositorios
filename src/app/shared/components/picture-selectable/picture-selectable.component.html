@@ -19,7 +19,7 @@
     <ion-button *ngIf="!isDisabled"
       class="change-picture-btn"
       expand="full" 
-      (click)="onChangePicture($event, fileLoader)">
+      (click)="presentPictureOptions($event, fileLoader)">
         <ion-icon slot="icon-only" name="image"></ion-icon>
     </ion-button>
     <ion-button *ngIf="!isDisabled"
@@ -36,7 +36,7 @@
     class="empty-picture-btn"
     expand="full" 
     fill="clear" 
-    (click)="onChangePicture($event,fileLoader)">
+    (click)="presentPictureOptions($event,fileLoader)">
       <ion-icon name="image" class="empty-picture-icon"></ion-icon>
   </ion-button>
 </div>

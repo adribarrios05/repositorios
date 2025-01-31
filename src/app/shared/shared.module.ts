@@ -6,14 +6,14 @@ import { PersonModalComponent } from './components/person-modal/person-modal.com
 import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-
-
+import { PictureOptionsComponent } from './components/picture-options/picture-options.component';
 
 @NgModule({
   declarations: [
     PersonModalComponent, 
     GroupSelectableComponent, 
-    PictureSelectableComponent
+    PictureSelectableComponent,
+    PictureOptionsComponent
   ],
   imports: [
     CommonModule,

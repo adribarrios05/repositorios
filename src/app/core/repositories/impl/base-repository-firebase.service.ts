@@ -15,7 +15,8 @@ import {
   startAfter,
   QueryConstraint,
   orderBy,
-  or
+  or,
+  where
 } from 'firebase/firestore';
 import { from, map, Observable, mergeMap } from 'rxjs';
 import { IBaseRepository, SearchParams } from '../intefaces/base-repository.interface';
@@ -57,15 +58,18 @@ export class BaseRepositoryFirebaseService<T extends Model> implements IBaseRepo
   getAll(page: number, pageSize: number, filters: SearchParams): Observable<T[] | Paginated<T>> {
     return from(this.getLastDocumentOfPreviousPage(page, pageSize)).pipe(
       map(lastDoc => {
-        const constraints: QueryConstraint[] = [
+        let constraints: QueryConstraint[] = [
           limit(pageSize)
         ];
-        
+
         if (lastDoc) {
           constraints.push(startAfter(lastDoc));
         }
-        
-        return query(this.collectionRef, ...constraints);
+        let q = query(this.collectionRef, ...constraints);
+        Object.entries(filters).forEach(([key, value]) => {
+            q = query(q, where(key, "==", value));
+        });
+        return q;
       }),
       mergeMap(q => getDocs(q)),
       map(snapshot => {
